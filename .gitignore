@@ -1,0 +1,12 @@
+node_modules/
+.DS_Store
+Thumbs.db
+*.log
+_check.js
+_probe.txt
+_npm.txt
+_smoke.js
+_smoke_out.txt
+.workbuddy/
+tools/_out*.txt
+tools/_final.txt

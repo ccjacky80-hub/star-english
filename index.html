@@ -1,0 +1,2591 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#FF7AA2">
+<title>星星英语 Star English · 三年级上册</title>
+<!-- 本工作台：儿童英语词汇与发音互动台｜单文件 / 全内联 / 零外部依赖 / localStorage 存储 -->
+<style>
+:root{
+  --bg:#FFF7EE;
+  --bg2:#FFEFE3;
+  --card:#FFFFFF;
+  --line:#F1E6DA;
+  --text:#3D3A4E;
+  --text2:#8B8397;
+  --pink:#FF7AA2;
+  --pink-d:#F4557F;
+  --sky:#4FBEE8;
+  --sky-d:#2C9CC8;
+  --green:#6BD36B;
+  --green-d:#3FAE45;
+  --gold:#FFC53D;
+  --gold-d:#F2A300;
+  --purple:#A98BE8;
+  --red:#FF5E4A;
+  --shadow:0 6px 18px rgba(214,160,120,.16);
+  --shadow-l:0 3px 10px rgba(214,160,120,.12);
+  --r:22px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{
+  background:linear-gradient(180deg,var(--bg) 0%,var(--bg2) 100%);
+  background-attachment:fixed;
+  color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif;
+  font-size:16px;line-height:1.6;
+  padding-bottom:calc(84px + env(safe-area-inset-bottom));
+}
+h1,h2,h3,h4,p{margin:0}
+button{font-family:inherit;font-size:16px;cursor:pointer;border:none;background:none;color:inherit}
+input,select{font-family:inherit;font-size:16px}
+
+/* ---------- 顶栏 ---------- */
+.topbar{
+  position:sticky;top:0;z-index:50;
+  background:rgba(255,247,238,.92);
+  backdrop-filter:blur(10px);
+  border-bottom:2px solid var(--line);
+  padding:10px 14px calc(10px);
+  display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+}
+.brand{display:flex;align-items:center;gap:10px;flex:1;min-width:0}
+.brand .logo{width:42px;height:42px;flex:0 0 42px}
+.brand h1{font-size:19px;font-weight:800;letter-spacing:.5px;white-space:nowrap}
+.brand .sub{font-size:12px;color:var(--text2);font-weight:600}
+.starchip{
+  display:flex;align-items:center;gap:6px;
+  background:linear-gradient(135deg,var(--gold),var(--gold-d));
+  color:#fff;font-weight:800;font-size:17px;
+  padding:6px 14px;border-radius:999px;
+  box-shadow:0 3px 8px rgba(242,163,0,.35);
+}
+.starchip svg{width:20px;height:20px}
+.tools{display:flex;align-items:center;gap:8px}
+.tbtn{
+  background:#fff;border:2px solid var(--line);border-radius:999px;
+  padding:8px 12px;font-size:13px;font-weight:700;color:var(--text2);
+  min-height:44px;
+}
+.tbtn:active{transform:scale(.96)}
+.savechip{
+  display:flex;align-items:center;gap:5px;font-size:12px;font-weight:700;
+  color:var(--green-d);background:#EAFAEA;border:2px solid #C8F0C8;
+  border-radius:999px;padding:6px 10px;white-space:nowrap;
+}
+.savechip svg{width:14px;height:14px}
+
+/* ---------- 导航 ---------- */
+.tabs{
+  display:flex;gap:8px;padding:12px 14px 4px;overflow-x:auto;
+  -webkit-overflow-scrolling:touch;scrollbar-width:none;
+}
+.tabs::-webkit-scrollbar{display:none}
+.tab{
+  flex:0 0 auto;display:flex;align-items:center;gap:7px;
+  background:#fff;border:2px solid var(--line);border-radius:999px;
+  padding:9px 16px;font-weight:800;font-size:15px;color:var(--text2);
+  min-height:46px;
+}
+.tab svg{width:19px;height:19px}
+.tab.active{background:var(--pink);border-color:var(--pink-d);color:#fff;box-shadow:0 4px 10px rgba(244,85,127,.3)}
+.tab.active svg{fill:#fff}
+@media(min-width:768px){
+  .tabs{justify-content:center;padding:14px 14px 0}
+}
+
+/* ---------- 容器 ---------- */
+main{max-width:900px;margin:0 auto;padding:8px 14px 20px}
+.panel{display:none;animation:fade .28s ease}
+.panel.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.card{
+  background:var(--card);border-radius:var(--r);box-shadow:var(--shadow);
+  padding:16px;margin-bottom:14px;border:2px solid #fff;
+}
+.card.tight{padding:12px}
+.sec-title{display:flex;align-items:center;gap:8px;font-size:16px;font-weight:800;margin-bottom:10px}
+.sec-title .dot{width:10px;height:10px;border-radius:50%;background:var(--pink)}
+.muted{color:var(--text2);font-size:13px;font-weight:600}
+
+/* ---------- 今日要处理 ---------- */
+.hero{
+  background:linear-gradient(135deg,#FFE9D6 0%,#FFD9E4 60%,#E4E0FF 100%);
+  border:none;position:relative;overflow:hidden;
+}
+.hero .bigrow{display:flex;align-items:baseline;gap:8px}
+.hero .num{font-size:46px;font-weight:900;color:var(--pink-d);line-height:1}
+.hero .unit{font-size:15px;font-weight:800;color:var(--text2)}
+.hero .tip{margin-top:6px;font-size:14px;font-weight:700;color:#7A6A80}
+.due-list{display:flex;flex-direction:column;gap:10px;margin-top:12px}
+.due-item{
+  display:flex;align-items:center;gap:10px;background:#fff;
+  border:2px solid var(--line);border-radius:16px;padding:10px 12px;
+}
+.due-item.overdue{border-color:#FFC7C0;background:#FFF3F1}
+.due-item .w{font-size:20px;font-weight:900;flex:1;min-width:0}
+.due-item .w small{display:block;font-size:12px;font-weight:700;color:var(--text2)}
+.badge{font-size:11px;font-weight:800;padding:3px 9px;border-radius:999px;white-space:nowrap}
+.badge.new{background:#E7F4FF;color:var(--sky-d)}
+.badge.rev{background:#F1E9FF;color:#7B5BC2}
+.badge.od{background:#FFE3DE;color:var(--red)}
+.emptybox{text-align:center;padding:22px 10px;color:var(--text2);font-weight:700}
+.emptybox svg{width:74px;height:74px;opacity:.65}
+
+/* ---------- 按钮 ---------- */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  min-height:52px;padding:12px 20px;border-radius:16px;
+  font-size:17px;font-weight:800;color:#fff;
+  background:var(--pink);box-shadow:0 4px 0 var(--pink-d);
+  transition:transform .08s;
+}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--pink-d)}
+.btn svg{width:21px;height:21px;fill:#fff}
+.btn.sky{background:var(--sky);box-shadow:0 4px 0 var(--sky-d)}
+.btn.green{background:var(--green);box-shadow:0 4px 0 var(--green-d)}
+.btn.gold{background:var(--gold);box-shadow:0 4px 0 var(--gold-d)}
+.btn.ghost{background:#fff;color:var(--text2);box-shadow:0 4px 0 var(--line);border:2px solid var(--line)}
+.btn.ghost svg{fill:var(--text2)}
+.btn.sm{min-height:44px;padding:8px 14px;font-size:14px;border-radius:13px}
+.btn.block{width:100%}
+.btn[disabled]{opacity:.45;pointer-events:none}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.row.center{justify-content:center}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:520px){.grid2{grid-template-columns:1fr}}
+
+/* ---------- 学习卡 ---------- */
+.wordcard{text-align:center;padding:6px 0 0}
+.illus{
+  width:150px;height:150px;margin:0 auto 6px;display:block;
+}
+.word-big{font-size:44px;font-weight:900;letter-spacing:1px;color:var(--text);line-height:1.15}
+.pho{font-size:19px;color:var(--sky-d);font-weight:700;font-family:"Segoe UI",Arial,sans-serif}
+.cn{
+  font-size:26px;font-weight:800;color:var(--text);margin-top:8px;
+  min-height:38px;
+}
+.cn.hide{color:transparent;background:#EFE7F5;border-radius:10px;user-select:none}
+.ex{
+  font-size:15px;font-weight:700;color:var(--text2);margin-top:4px;font-style:italic;
+}
+.pillrow{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin-top:8px}
+.pill{font-size:11px;font-weight:800;padding:3px 10px;border-radius:999px;background:#F4EEFF;color:#7B5BC2}
+.pill.ok{background:#E7F8E7;color:var(--green-d)}
+.pill.warn{background:#FFF0E0;color:var(--gold-d)}
+.progbar{height:12px;border-radius:999px;background:#F0E8F5;overflow-hidden;margin:12px 0 4px}
+.progbar i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--gold),var(--pink));transition:width .4s}
+
+.feedback{
+  margin-top:10px;padding:12px;border-radius:16px;font-weight:800;font-size:16px;
+  display:none;
+}
+.feedback.show{display:block;animation:pop .3s}
+@keyframes pop{from{transform:scale(.9);opacity:0}to{transform:none;opacity:1}}
+.feedback.good{background:#E7F8E7;color:var(--green-d);border:2px solid #BFEABF}
+.feedback.mid{background:#FFF6E0;color:var(--gold-d);border:2px solid #FFE4A8}
+.feedback.bad{background:#FFF0ED;color:var(--red);border:2px solid #FFCFC6}
+.scorebig{font-size:34px;font-weight:900;display:block;line-height:1.1}
+.heard{font-size:13px;font-weight:700;color:var(--text2);margin-top:2px;word-break:break-word}
+
+/* 听音选词 */
+.quiz-wrap{display:none}
+.quiz-wrap.show{display:block}
+.qopts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.qopt{
+  background:#fff;border:3px solid var(--line);border-radius:16px;
+  min-height:56px;font-size:19px;font-weight:800;padding:10px;
+}
+.qopt:active{transform:scale(.97)}
+.qopt.right{background:#E7F8E7;border-color:var(--green)}
+.qopt.wrong{background:#FFF0ED;border-color:#FFB2A4}
+
+/* ---------- 成长 ---------- */
+.starbox{text-align:center;padding:6px 0 2px}
+.levelrow{display:flex;align-items:center;gap:10px;justify-content:center;margin-top:8px}
+.levelname{font-size:22px;font-weight:900;color:var(--gold-d)}
+.bignum{font-size:52px;font-weight:900;color:var(--gold-d);line-height:1}
+.unitmap{display:flex;flex-direction:column;gap:10px}
+.unitrow{
+  display:flex;align-items:center;gap:12px;background:#fff;
+  border:2px solid var(--line);border-radius:18px;padding:11px 13px;position:relative;
+}
+.unitrow.locked{background:#F7F3F1;color:var(--text2)}
+.unitrow .uicon{width:46px;height:46px;flex:0 0 46px}
+.unitrow .umain{flex:1;min-width:0}
+.unitrow .utitle{font-size:16px;font-weight:800}
+.unitrow .umeta{font-size:12px;font-weight:700;color:var(--text2)}
+.uminibar{height:9px;background:#F0E8F5;border-radius:999px;overflow:hidden;margin-top:5px}
+.uminibar i{display:block;height:100%;background:linear-gradient(90deg,var(--sky),var(--green))}
+.lockflag{position:absolute;top:-6px;right:8px;background:#E9E2EE;color:#7B7288;font-size:10px;font-weight:800;padding:2px 8px;border-radius:999px}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:8px}
+.cal .h{text-align:center;font-size:11px;font-weight:800;color:var(--text2);padding-bottom:2px}
+.cal .d{
+  aspect-ratio:1;border-radius:12px;background:#F7F1F6;
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:800;color:#B7AEC2;
+}
+.cal .d.done{background:linear-gradient(135deg,var(--green),#9BE69B);color:#fff}
+.cal .d.today{outline:3px solid var(--pink);outline-offset:1px}
+.cal .d.empty{background:transparent}
+.statgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:6px}
+.stat{background:#fff;border:2px solid var(--line);border-radius:16px;padding:10px 6px;text-align:center}
+.stat b{display:block;font-size:24px;font-weight:900;color:var(--pink-d);line-height:1.2}
+.stat span{font-size:11px;font-weight:700;color:var(--text2)}
+
+/* ---------- 家长 ---------- */
+.pinbox{text-align:center;padding:14px 6px}
+.pindots{display:flex;gap:12px;justify-content:center;margin:14px 0}
+.pindot{width:18px;height:18px;border-radius:50%;background:#EFE6F5;border:2px solid var(--line)}
+.pindot.on{background:var(--purple);border-color:var(--purple)}
+.keypad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:280px;margin:0 auto}
+.key{
+  background:#fff;border:2px solid var(--line);border-radius:16px;
+  min-height:56px;font-size:22px;font-weight:800;box-shadow:0 3px 0 var(--line);
+}
+.key:active{transform:translateY(2px);box-shadow:none}
+.setrow{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px dashed var(--line)}
+.setrow:last-child{border-bottom:none}
+.setrow .lb{font-weight:800;font-size:15px}
+.setrow .sub{font-size:12px;color:var(--text2);font-weight:600}
+.stepper{display:flex;align-items:center;gap:8px}
+.stepper button{width:44px;height:44px;border-radius:14px;background:var(--sky);color:#fff;font-size:22px;font-weight:900}
+.stepper .val{min-width:44px;text-align:center;font-size:20px;font-weight:900}
+.dangerzone{background:#FFF3F1;border:2px solid #FFD9D2;border-radius:18px;padding:12px}
+.repgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+@media(max-width:520px){.repgrid{grid-template-columns:1fr}}
+
+/* ---------- 通用小组件 ---------- */
+.chartbox{width:100%;overflow-x:auto}
+.tag{display:inline-block;font-size:11px;font-weight:800;padding:2px 9px;border-radius:999px;background:#EFE6F5;color:#7B5BC2}
+.hint-box{background:#FFF9E8;border:2px solid #FFE9B8;border-radius:16px;padding:10px 12px;font-size:13px;font-weight:700;color:#8A6A20}
+.demo-bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;background:#FFF0F5;border:2px solid #FFD6E4;border-radius:16px;padding:10px 12px;margin-bottom:12px}
+.toast{
+  position:fixed;left:50%;top:14px;transform:translateX(-50%);z-index:200;
+  background:#3D3A4E;color:#fff;font-weight:800;font-size:14px;
+  padding:11px 18px;border-radius:999px;box-shadow:var(--shadow);
+  opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(4px)}
+.modal{
+  position:fixed;inset:0;z-index:300;background:rgba(61,58,78,.5);
+  display:none;align-items:center;justify-content:center;padding:18px;
+}
+.modal.show{display:flex}
+.modal .box{background:#fff;border-radius:22px;padding:20px;max-width:400px;width:100%;box-shadow:var(--shadow)}
+.modal h3{font-size:19px;font-weight:900;margin-bottom:8px}
+.modal p{font-size:14px;color:var(--text2);font-weight:600;margin-bottom:14px}
+.celebrate{position:fixed;inset:0;z-index:400;display:none;align-items:center;justify-content:center;background:rgba(255,247,238,.94);flex-direction:column;gap:10px;text-align:center;padding:24px}
+.celebrate.show{display:flex;animation:fade .3s}
+.celebrate .c-title{font-size:32px;font-weight:900;color:var(--pink-d)}
+.celebrate .c-sub{font-size:17px;font-weight:800;color:var(--text2)}
+.bounce{animation:bounce .7s infinite alternate}
+@keyframes bounce{from{transform:translateY(0)}to{transform:translateY(-14px)}}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <svg class="logo" viewBox="0 0 48 48" aria-hidden="true">
+      <circle cx="24" cy="24" r="22" fill="#FFC53D"/>
+      <path d="M24 8l4.6 9.9 10.6 1.4-7.8 7.4 2 10.6L24 32.4l-9.4 4.9 2-10.6-7.8-7.4 10.6-1.4z" fill="#fff"/>
+    </svg>
+    <div>
+      <h1>星星英语 Star English</h1>
+      <div class="sub">人教版 PEP 三年级上册 · 2024新版</div>
+    </div>
+  </div>
+  <div class="tools">
+    <div class="starchip">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#fff" d="M12 2l2.9 6.3 6.8.9-5 4.8 1.3 6.8L12 17.4 6 20.8l1.3-6.8-5-4.8 6.8-.9z"/></svg>
+      <span id="starCount">0</span>
+    </div>
+    <div class="savechip" id="saveChip">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#3FAE45" d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg>
+      <span>本地已保存</span>
+    </div>
+  </div>
+</header>
+
+<nav class="tabs" id="tabs">
+  <button class="tab active" data-tab="today">
+    <svg viewBox="0 0 24 24"><path fill="#8B8397" d="M19 4h-1V2h-2v2h-8V2H6v2H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2V6a2 2 0 00-2-2zm0 16H5V10h14zm0-12H5V6h14z"/></svg>
+    <span>今日</span>
+  </button>
+  <button class="tab" data-tab="learn">
+    <svg viewBox="0 0 24 24"><path fill="#8B8397" d="M12 3l9 4-9 4-9-4 9-4zm0 6.9l7.6-3.4v6.1c0 3.6-3.1 6.9-7.6 8.4-4.5-1.5-7.6-4.8-7.6-8.4V6.5L12 9.9z"/></svg>
+    <span>学习</span>
+  </button>
+  <button class="tab" data-tab="grow">
+    <svg viewBox="0 0 24 24"><path fill="#8B8397" d="M12 2l3 6 6 1-4.5 4.3 1 6.2L12 16.3 6.5 19.5l1-6.2L3 9l6-1z"/></svg>
+    <span>成长</span>
+  </button>
+  <button class="tab" data-tab="parent">
+    <svg viewBox="0 0 24 24"><path fill="#8B8397" d="M12 1a5 5 0 00-5 5v3H6a2 2 0 00-2 2v9a2 2 0 002 2h12a2 2 0 002-2v-9a2 2 0 00-2-2h-1V6a5 5 0 00-5-5zm3 8H9V6a3 3 0 016 0z"/></svg>
+    <span>家长</span>
+  </button>
+</nav>
+
+<main>
+  <!-- ============ 今日 ============ -->
+  <section class="panel active" id="panel-today">
+    <div class="demo-bar" id="demoBar">
+      <span class="tag">示例数据</span>
+      <span class="muted">当前显示的是预置示例进度，方便孩子先看看效果</span>
+      <button class="btn ghost sm" id="btnClearDemo">清空示例重新开始</button>
+    </div>
+
+    <div class="card hero">
+      <div class="sec-title"><i class="dot"></i><span>今天要处理</span></div>
+      <div class="bigrow">
+        <span class="num" id="todayCount">0</span>
+        <span class="unit">个单词等你出发！</span>
+      </div>
+      <div class="tip" id="todayTip">完成今天的练习，就能拿到星星奖励～</div>
+      <div class="due-list" id="dueList"></div>
+      <div class="row center" style="margin-top:14px">
+        <button class="btn gold" id="btnStartLearn">
+          <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          <span>开始今天的学习</span>
+        </button>
+      </div>
+      <div style="margin-top:10px" class="progbar"><i id="todayBar" style="width:0%"></i></div>
+      <div class="muted" id="todayBarText" style="text-align:center">今日进度 0 / 0</div>
+    </div>
+
+    <div class="card">
+      <div class="sec-title"><i class="dot" style="background:var(--sky)"></i><span>快捷练习</span></div>
+      <div class="row">
+        <button class="btn sky" id="btnQuickListen">
+          <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3a4.5 4.5 0 00-2.5-4v8a4.5 4.5 0 002.5-4zM14 3.2v2.1a6.8 6.8 0 010 13.4v2.1a9 9 0 000-17.6z"/></svg>
+          <span>听音选词小擂台</span>
+        </button>
+        <button class="btn green" id="btnReviewAll">
+          <svg viewBox="0 0 24 24"><path d="M12 4a8 8 0 108 8h-2a6 6 0 11-6-6V4zm1 0h4v4h-2V6.4A8.2 8.2 0 0113 4z"/></svg>
+          <span>复习已学的词</span>
+        </button>
+      </div>
+      <div class="hint-box" style="margin-top:12px">
+        小提示：每天练习的时间不要太长，10 分钟刚刚好。耳朵多听、嘴巴多读，星星会越来越多！
+      </div>
+    </div>
+
+    <div class="card tight">
+      <div class="sec-title"><i class="dot" style="background:var(--gold)"></i><span>数据备份</span></div>
+      <div class="row">
+        <button class="btn ghost sm" id="btnExport">导出备份（JSON）</button>
+        <button class="btn ghost sm" id="btnImport">从备份导入恢复</button>
+        <input type="file" id="fileImport" accept="application/json" hidden>
+      </div>
+      <div class="muted" style="margin-top:8px">数据保存在这台设备的浏览器里。换设备、清缓存前记得先导出备份。</div>
+    </div>
+  </section>
+
+  <!-- ============ 学习 ============ -->
+  <section class="panel" id="panel-learn">
+    <div class="card wordcard" id="learnCard">
+      <div id="learnEmpty" class="emptybox">
+        <svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="#FFEFE3"/><path d="M35 45h30M35 55h20" stroke="#FFB0C6" stroke-width="6" stroke-linecap="round"/><circle cx="50" cy="50" r="34" fill="none" stroke="#FFB0C6" stroke-width="4"/></svg>
+        <p>现在没有要练的词啦！</p>
+        <p class="muted">回到「今日」页面安排一批单词吧</p>
+      </div>
+
+      <div id="learnBody" style="display:none">
+        <div class="pillus">
+          <div style="display:flex;justify-content:center;gap:6px;margin-bottom:6px" id="learnTags"></div>
+          <div id="illusBox" class="illus-wrap"></div>
+        </div>
+        <div class="word-big" id="wWord">word</div>
+        <div class="pho" id="wPho">/wɜːd/</div>
+        <div class="cn hide" id="wCn">词</div>
+        <div class="ex" id="wEx"></div>
+        <div class="pillrow" id="wPills"></div>
+        <div class="qopts" id="quizOpts" style="display:none"></div>
+        <div class="muted" id="quizHint" style="display:none;text-align:center;margin-top:8px">点上面的小喇叭，听一听是哪个单词？</div>
+
+        <div class="progbar"><i id="learnBar" style="width:0%"></i></div>
+        <div class="muted" id="learnBarText" style="text-align:center">第 0 / 0 个</div>
+
+        <div class="row center" style="margin-top:12px">
+          <button class="btn sky sm" id="btnSpeak">
+            <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3a4.5 4.5 0 00-2.5-4v8a4.5 4.5 0 002.5-4z"/></svg><span>听一听</span>
+          </button>
+          <button class="btn ghost sm" id="btnExample">
+            <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h10v2H4z"/></svg><span>听例句</span>
+          </button>
+          <button class="btn ghost sm" id="btnReveal">显示中文</button>
+        </div>
+
+        <div class="card tight" id="readCard" style="margin-top:12px;box-shadow:none;border-color:var(--line)">
+          <div class="sec-title" style="margin-bottom:6px"><i class="dot" style="background:var(--green)"></i><span>我来读一读</span></div>
+          <div class="row center">
+            <button class="btn green" id="btnRecord">
+              <svg viewBox="0 0 24 24"><path d="M12 15a3 3 0 003-3V6a3 3 0 00-6 0v6a3 3 0 003 3zm5-3a5 5 0 01-10 0H5a7 7 0 006 6.9V21h2v-2.1A7 7 0 0019 12z"/></svg>
+              <span id="recLabel">点我说话</span>
+            </button>
+            <button class="btn ghost sm" id="btnReplay" style="display:none">
+              <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg><span>听我刚才读的</span>
+            </button>
+          </div>
+          <div class="feedback" id="fbBox">
+            <span class="scorebig" id="fbScore">90分</span>
+            <span id="fbText">读得很棒！</span>
+            <div class="heard" id="fbHeard"></div>
+          </div>
+          <div id="selfJudge" style="display:none">
+            <div class="muted" style="text-align:center;margin-top:8px">录音已经存好啦，听一听，自己评一评：</div>
+            <div class="row center" style="margin-top:8px">
+              <button class="btn green sm" id="btnSelfOk">读得像 ★★★</button>
+              <button class="btn gold sm" id="btnSelfAgain">还要再练 ★★</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="feedback good" id="tipDone" style="display:none;text-align:center">
+          🎉 太棒啦！今天的单词全部完成，去「成长」页面看看你的星星和地图吧！
+          <div class="row center" style="margin-top:10px">
+            <button class="btn gold sm" id="btnToGrow">去看我的成长地图</button>
+          </div>
+        </div>
+
+        <div class="row center" style="margin-top:14px">
+          <button class="btn ghost sm" id="btnBackToday">先练到这</button>
+          <button class="btn green" id="btnMaster">
+            <svg viewBox="0 0 24 24"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg><span>记住啦</span>
+          </button>
+          <button class="btn gold" id="btnAgain">
+            <svg viewBox="0 0 24 24"><path d="M12 4a8 8 0 108 8h-2a6 6 0 11-6-6V4z"/></svg><span>再练一次</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 成长 ============ -->
+  <section class="panel" id="panel-grow">
+    <div class="card starbox">
+      <div class="sec-title" style="justify-content:center"><i class="dot" style="background:var(--gold)"></i><span>我的星星</span></div>
+      <div class="bignum" id="growStars">0</div>
+      <div class="levelrow">
+        <svg viewBox="0 0 24 24" width="26" height="26"><path fill="#F2A300" d="M12 2l2.9 6.3 6.8.9-5 4.8 1.3 6.8L12 17.4 6 20.8l1.3-6.8-5-4.8 6.8-.9z"/></svg>
+        <span class="levelname" id="levelName">小星星</span>
+      </div>
+      <div class="muted" id="levelNext">再得 50 颗星就能升级啦</div>
+      <div class="progbar" style="max-width:320px;margin:12px auto 0"><i id="levelBar" style="width:0%"></i></div>
+    </div>
+
+    <div class="card">
+      <div class="sec-title"><i class="dot" style="background:var(--sky)"></i><span>单元闯关地图</span></div>
+      <div class="unitmap" id="unitMap"></div>
+    </div>
+
+    <div class="card">
+      <div class="sec-title"><i class="dot" style="background:var(--green)"></i><span>连续打卡</span></div>
+      <div class="statgrid" style="margin-bottom:10px">
+        <div class="stat"><b id="statStreak">0</b><span>连续天数</span></div>
+        <div class="stat"><b id="statDays">0</b><span>累计学习</span></div>
+        <div class="stat"><b id="statMaster">0</b><span>掌握单词</span></div>
+      </div>
+      <div class="cal" id="calWrap"></div>
+      <div class="muted" style="margin-top:8px;text-align:center">绿色格子表示当天完成了练习。连续天数越高，奖励星星越多！</div>
+    </div>
+  </section>
+
+  <!-- ============ 家长 ============ -->
+  <section class="panel" id="panel-parent">
+    <div class="card" id="pinCard">
+      <div class="sec-title"><i class="dot" style="background:var(--purple)"></i><span id="pinTitle">家长模式</span></div>
+      <div class="pinbox">
+        <div class="muted" id="pinHint">请输入 4 位密码</div>
+        <div class="pindots" id="pinDots">
+          <i class="pindot"></i><i class="pindot"></i><i class="pindot"></i><i class="pindot"></i>
+        </div>
+        <div class="keypad" id="keypad"></div>
+      </div>
+    </div>
+
+    <div id="parentBody" style="display:none">
+      <div class="card">
+        <div class="sec-title"><i class="dot" style="background:var(--purple)"></i><span>本周学习报告</span></div>
+        <div class="repgrid">
+          <div class="chartbox" id="weekChart"></div>
+          <div class="chartbox" id="pieChart"></div>
+        </div>
+        <div class="statgrid" style="margin-top:12px">
+          <div class="stat"><b id="rToday">0</b><span>今日练习</span></div>
+          <div class="stat"><b id="rWeek">0</b><span>本周练习</span></div>
+          <div class="stat"><b id="rAvg">-</b><span>发音平均分</span></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="sec-title"><i class="dot" style="background:var(--sky)"></i><span>学习设置</span></div>
+        <div class="setrow">
+          <div><div class="lb">每天新词量</div><div class="sub">建议 6 个，约 10 分钟完成</div></div>
+          <div class="stepper">
+            <button id="minusNew">−</button><div class="val" id="valNew">6</div><button id="plusNew">＋</button>
+          </div>
+        </div>
+        <div class="setrow">
+          <div><div class="lb">发音打分方式</div><div class="sub" id="asrModeDesc">自动：能用就用 AI 打分，不行自动改成录音自评</div></div>
+          <button class="btn ghost sm" id="btnToggleAsr">自动</button>
+        </div>
+        <div class="setrow">
+          <div><div class="lb">补充词库</div><div class="sub" id="boostDesc">开启后每天额外混入几个功能词（I / you / is / play 等），不占闯关地图</div></div>
+          <button class="btn ghost sm" id="btnToggleBoost">已关闭</button>
+        </div>
+        <div class="setrow" id="boostMixRow" style="display:none">
+          <div><div class="lb">每天混入数量</div><div class="sub">建议 2 个，太多会挤压课本词</div></div>
+          <div class="stepper">
+            <button id="minusBoost">−</button><div class="val" id="valBoost">2</div><button id="plusBoost">＋</button>
+          </div>
+        </div>
+        <div class="setrow">
+          <div><div class="lb">朗读语速</div><div class="sub">慢速更适合初学的小朋友</div></div>
+          <div class="stepper">
+            <button id="minusRate">−</button><div class="val" id="valRate">0.85</div><button id="plusRate">＋</button>
+          </div>
+        </div>
+        <div class="setrow">
+          <div><div class="lb">修改密码</div><div class="sub">忘记密码可用备份文件恢复数据</div></div>
+          <button class="btn ghost sm" id="btnChangePin">修改</button>
+        </div>
+      </div>
+
+      <div class="card dangerzone">
+        <div class="sec-title"><i class="dot" style="background:var(--red)"></i><span>数据管理</span></div>
+        <div class="muted" style="margin-bottom:10px">清空前建议先导出备份。清空后所有星星、进度都会消失。</div>
+        <div class="row">
+          <button class="btn ghost sm" id="btnExport2">导出备份</button>
+          <button class="btn ghost sm" id="btnResetDemo">重置为示例数据</button>
+          <button class="btn sm" style="background:var(--red);box-shadow:0 4px 0 #D63A28" id="btnWipe">清空全部数据</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div class="toast" id="toast"></div>
+<div class="modal" id="modal">
+  <div class="box">
+    <h3 id="mTitle">提示</h3>
+    <p id="mText"></p>
+    <div class="row" style="justify-content:flex-end">
+      <button class="btn ghost sm" id="mCancel">取消</button>
+      <button class="btn sm" id="mOk">确定</button>
+    </div>
+  </div>
+</div>
+<div class="celebrate" id="celebrate">
+  <svg viewBox="0 0 100 100" width="120" height="120" class="bounce">
+    <circle cx="50" cy="50" r="42" fill="#FFC53D"/>
+    <path d="M50 16l9.4 19.9 21.6 2.9-15.9 15 4.3 21.6L50 65.8 30.6 75.4l4.3-21.6-15.9-15 21.6-2.9z" fill="#fff"/>
+  </svg>
+  <div class="c-title" id="celTitle">太棒了！</div>
+  <div class="c-sub" id="celSub">今天的任务全部完成，获得 10 颗星星！</div>
+  <button class="btn gold" id="celClose">收下星星</button>
+</div>
+<script>
+/* =====================================================================
+   星星英语 Star English - 儿童英语词汇与发音互动工作台
+   人教版 PEP 三年级上册（2024新版）词库，共 6 个单元
+   存储：localStorage（前缀 wb_kidsen_） + JSON 导出导入备份
+   ===================================================================== */
+'use strict';
+
+/* ---------- 0. 常量与工具 ---------- */
+var LS = 'wb_kidsen_';
+var KEY_STATE = LS + 'state';
+var KEY_PIN = LS + 'pin';
+
+function $(id){ return document.getElementById(id); }
+function el(tag, cls, html){ var e=document.createElement(tag); if(cls) e.className=cls; if(html!=null) e.innerHTML=html; return e; }
+function todayStr(){ return fmtDate(new Date()); }
+function fmtDate(d){
+  var m=d.getMonth()+1, dd=d.getDate();
+  return d.getFullYear()+'-'+(m<10?'0':'')+m+'-'+(dd<10?'0':'')+dd;
+}
+function parseDate(s){ var p=String(s).split('-'); return new Date(+p[0], +p[1]-1, +p[2]); }
+function addDays(s, n){ var d=parseDate(s); d.setDate(d.getDate()+n); return fmtDate(d); }
+function diffDays(a, b){ return Math.round((parseDate(b)-parseDate(a))/86400000); }
+function clamp(v,a,b){ return v<a?a:(v>b?b:v); }
+function esc(s){ return String(s).replace(/[&<>"]/g,function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+function norm(s){ return String(s||'').toLowerCase().replace(/[^a-z0-9'\s]/g,'').trim(); }
+function levenshtein(a,b){
+  a=a||''; b=b||'';
+  if(a===b) return 0;
+  var m=a.length,n=b.length,i,j,prev=[],cur=[];
+  if(!m) return n; if(!n) return m;
+  for(j=0;j<=n;j++) prev[j]=j;
+  for(i=1;i<=m;i++){
+    cur[0]=i;
+    for(j=1;j<=n;j++){
+      cur[j]=Math.min(prev[j]+1, cur[j-1]+1, prev[j-1]+(a.charAt(i-1)===b.charAt(j-1)?0:1));
+    }
+    for(j=0;j<=n;j++) prev[j]=cur[j];
+  }
+  return prev[n];
+}
+function similarity(a,b){
+  a=norm(a); b=norm(b);
+  if(!a||!b) return 0;
+  if(a===b) return 1;
+  var d=levenshtein(a,b), L=Math.max(a.length,b.length);
+  var s=1-d/L;
+  if(b.indexOf(a)>=0||a.indexOf(b)>=0) s=Math.max(s,0.8);
+  return clamp(s,0,1);
+}
+function shuffle(arr){
+  var a=arr.slice(),i,j,t;
+  for(i=a.length-1;i>0;i--){ j=Math.floor(Math.random()*(i+1)); t=a[i]; a[i]=a[j]; a[j]=t; }
+  return a;
+}
+var toastTimer=null;
+function toast(msg){
+  var t=$('toast'); t.textContent=msg; t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(function(){ t.classList.remove('show'); },1900);
+}
+function confirmBox(title, text, okText){
+  return new Promise(function(resolve){
+    $('mTitle').textContent=title; $('mText').textContent=text;
+    $('mOk').textContent=okText||'确定';
+    $('modal').classList.add('show');
+    function done(v){
+      $('modal').classList.remove('show');
+      $('mOk').removeEventListener('click', okHandler);
+      $('mCancel').removeEventListener('click', cancelHandler);
+      resolve(v);
+    }
+    function okHandler(){ done(true); }
+    function cancelHandler(){ done(false); }
+    $('mOk').addEventListener('click', okHandler);
+    $('mCancel').addEventListener('click', cancelHandler);
+  });
+}
+
+/* ---------- 1. 单元与词库 ---------- */
+var UNITS = [
+  {no:1,  name:'交朋友',        en:'Making friends',      color:'#FF7AA2', book:'三上'},
+  {no:2,  name:'不同的家庭',    en:'Different families',  color:'#A98BE8', book:'三上'},
+  {no:3,  name:'了不起的动物',  en:'Amazing animals',     color:'#6BD36B', book:'三上'},
+  {no:4,  name:'身边的植物',    en:'Plants around us',    color:'#4FBEE8', book:'三上'},
+  {no:5,  name:'多彩的世界',    en:'The colourful world', color:'#FFC53D', book:'三上'},
+  {no:6,  name:'数字乐园',      en:'Numbers',             color:'#FF9C6E', book:'三上'},
+  {no:7,  name:'新同学新朋友',  en:'My new friends',      color:'#2FBFB0', book:'三下'},
+  {no:8,  name:'我的小动物',    en:'My lovely pet',       color:'#C86BE0', book:'三下'},
+  {no:9,  name:'感官与文具',    en:'My senses',           color:'#5B8DEF', book:'三下'},
+  {no:10, name:'美味的食物',    en:'Yummy food',          color:'#FFA940', book:'三下'},
+  {no:11, name:'我的小房间',    en:'Where is my ball?',   color:'#8CC63F', book:'三下'},
+  {no:12, name:'数字与购物',    en:'Numbers and shopping',color:'#FF6B8B', book:'三下'}
+];
+// u=0 为「补充池」：功能词/主题拓展词，不占闯关地图，由家长开关控制每天混入
+var BOOST_UNIT = {no:0, name:'补充词库', en:'Bonus words', color:'#B0A4E8', book:'补充'};
+
+var TOPICS = {
+  body:'身体', family:'家人', animal:'动物', plant:'植物', colour:'颜色', number:'数字',
+  food:'食物', school:'学校', home:'家里', thing:'物品', action:'动作', feeling:'感觉',
+  func:'功能词', place:'地方', time:'时间', sense:'感官', weather:'天气'
+};
+var SRCNAME = { pep3a:'三上课本', pep3b:'三下课本', func:'功能词', topic:'主题拓展' };
+
+// en 单词 / ph 音标 / cn 中文 / ex 例句 / art 插图
+var WORDS = [
+  // ---- Unit 1 ----
+  {u:1,en:'name',ph:'/neɪm/',cn:'名字',ex:'My name is Anna.',art:'scene:friend',topic:'func',lvl:1,src:'pep3a'},
+  {u:1,en:'nice',ph:'/naɪs/',cn:'令人愉快的；友好的',ex:'Nice to meet you!',art:'scene:smile',topic:'feeling',lvl:1,src:'pep3a'},
+  {u:1,en:'ear',ph:'/ɪə(r)/',cn:'耳朵',ex:'This is my ear.',art:'ear',topic:'body',lvl:1,src:'pep3a'},
+  {u:1,en:'hand',ph:'/hænd/',cn:'手',ex:'Wash your hands.',art:'hand',topic:'body',lvl:1,src:'pep3a'},
+  {u:1,en:'eye',ph:'/aɪ/',cn:'眼睛',ex:'She has big eyes.',art:'eye',topic:'body',lvl:1,src:'pep3a'},
+  {u:1,en:'mouth',ph:'/maʊθ/',cn:'嘴',ex:'Open your mouth.',art:'mouth',topic:'body',lvl:1,src:'pep3a'},
+  {u:1,en:'arm',ph:'/ɑːm/',cn:'胳膊',ex:'Wave your arm.',art:'arm',topic:'body',lvl:1,src:'pep3a'},
+  {u:1,en:'can',ph:'/kæn/',cn:'可以；能',ex:'I can help you.',art:'scene:help',topic:'func',lvl:1,src:'pep3a'},
+  {u:1,en:'share',ph:'/ʃeə(r)/',cn:'分享',ex:'Let us share the toy.',art:'share',topic:'action',lvl:1,src:'pep3a'},
+  {u:1,en:'smile',ph:'/smaɪl/',cn:'微笑',ex:'Please smile!',art:'smile',topic:'action',lvl:1,src:'pep3a'},
+  {u:1,en:'listen',ph:'/ˈlɪsn/',cn:'听；倾听',ex:'Listen to me, please.',art:'listen',topic:'action',lvl:1,src:'pep3a'},
+  {u:1,en:'help',ph:'/help/',cn:'帮助',ex:'Can I help you?',art:'help',topic:'action',lvl:1,src:'pep3a'},
+  {u:1,en:'say',ph:'/seɪ/',cn:'说；讲',ex:'Say hello to Lily.',art:'say',topic:'action',lvl:1,src:'pep3a'},
+  {u:1,en:'friend',ph:'/frend/',cn:'朋友',ex:'This is my friend.',art:'friend',topic:'family',lvl:1,src:'pep3a'},
+  {u:1,en:'good',ph:'/ɡʊd/',cn:'好的',ex:'Good morning!',art:'scene:smile',topic:'feeling',lvl:1,src:'pep3a'},
+  {u:1,en:'and',ph:'/ænd/',cn:'和；与',ex:'Tom and Lily are friends.',art:'scene:friend',topic:'func',lvl:1,src:'pep3a'},
+  {u:1,en:'goodbye',ph:'/ˌɡʊdˈbaɪ/',cn:'再见',ex:'Goodbye, Miss White!',art:'wave',topic:'func',lvl:1,src:'pep3a'},
+  {u:1,en:'toy',ph:'/tɔɪ/',cn:'玩具',ex:'This is my new toy.',art:'toy',topic:'thing',lvl:1,src:'pep3a'},
+
+  // ---- Unit 2 ----
+  {u:2,en:'mum',ph:'/mʌm/',cn:'妈妈',ex:'My mum is kind.',art:'mum',topic:'family',lvl:1,src:'pep3a'},
+  {u:2,en:'dad',ph:'/dæd/',cn:'爸爸',ex:'My dad is tall.',art:'dad',topic:'family',lvl:1,src:'pep3a'},
+  {u:2,en:'grandma',ph:'/ˈɡrænmɑː/',cn:'（口语）奶奶；外婆',ex:'This is my grandma.',art:'grandma',topic:'family',lvl:1,src:'pep3a'},
+  {u:2,en:'grandpa',ph:'/ˈɡrænpɑː/',cn:'（口语）爷爷；外公',ex:'My grandpa likes tea.',art:'grandpa',topic:'family',lvl:1,src:'pep3a'},
+  {u:2,en:'grandfather',ph:'/ˈɡrænfɑːðə(r)/',cn:'（外）祖父',ex:'He is my grandfather.',art:'grandpa',topic:'family',lvl:1,src:'pep3a'},
+  {u:2,en:'grandmother',ph:'/ˈɡrænmʌðə(r)/',cn:'（外）祖母',ex:'She is my grandmother.',art:'grandma',topic:'family',lvl:1,src:'pep3a'},
+  {u:2,en:'mother',ph:'/ˈmʌðə(r)/',cn:'母亲；妈妈',ex:'This is my mother.',art:'mum',topic:'family',lvl:1,src:'pep3a'},
+  {u:2,en:'father',ph:'/ˈfɑːðə(r)/',cn:'父亲；爸爸',ex:'This is my father.',art:'dad',topic:'family',lvl:1,src:'pep3a'},
+  {u:2,en:'me',ph:'/miː/',cn:'我',ex:'This is me!',art:'me',topic:'func',lvl:1,src:'pep3a'},
+  {u:2,en:'sister',ph:'/ˈsɪstə(r)/',cn:'姐；妹',ex:'I have a sister.',art:'sister',topic:'family',lvl:1,src:'pep3a'},
+  {u:2,en:'family',ph:'/ˈfæməli/',cn:'家；家庭',ex:'I love my family.',art:'family',topic:'family',lvl:1,src:'pep3a'},
+  {u:2,en:'have',ph:'/hæv/',cn:'有',ex:'I have a big family.',art:'scene:gift',topic:'func',lvl:1,src:'pep3a'},
+  {u:2,en:'big',ph:'/bɪɡ/',cn:'大的',ex:'It is a big dog.',art:'scene:elephant',topic:'feeling',lvl:1,src:'pep3a'},
+  {u:2,en:'cousin',ph:'/ˈkʌzn/',cn:'堂（表）兄弟姐妹',ex:'He is my cousin.',art:'cousin',topic:'family',lvl:1,src:'pep3a'},
+  {u:2,en:'brother',ph:'/ˈbrʌðə(r)/',cn:'兄；弟',ex:'I have a brother.',art:'brother',topic:'family',lvl:1,src:'pep3a'},
+  {u:2,en:'baby',ph:'/ˈbeɪbi/',cn:'婴儿',ex:'The baby is cute.',art:'baby',topic:'family',lvl:1,src:'pep3a'},
+  {u:2,en:'uncle',ph:'/ˈʌŋkl/',cn:'叔叔；舅舅',ex:'My uncle is funny.',art:'uncle',topic:'family',lvl:1,src:'pep3a'},
+  {u:2,en:'aunt',ph:'/ɑːnt/',cn:'阿姨；姑姑',ex:'My aunt is nice.',art:'aunt',topic:'family',lvl:1,src:'pep3a'},
+  {u:2,en:'some',ph:'/sʌm/',cn:'一些',ex:'I have some books.',art:'scene:apple',topic:'func',lvl:1,src:'pep3a'},
+  {u:2,en:'small',ph:'/smɔːl/',cn:'小的',ex:'It is a small cat.',art:'scene:cat',topic:'feeling',lvl:1,src:'pep3a'},
+
+  // ---- Unit 3 ----
+  {u:3,en:'like',ph:'/laɪk/',cn:'喜欢',ex:'I like dogs.',art:'heart',topic:'action',lvl:1,src:'pep3a'},
+  {u:3,en:'dog',ph:'/dɒɡ/',cn:'狗',ex:'The dog can run.',art:'dog',topic:'animal',lvl:1,src:'pep3a'},
+  {u:3,en:'pet',ph:'/pet/',cn:'宠物',ex:'This is my pet.',art:'dog',topic:'animal',lvl:1,src:'pep3a'},
+  {u:3,en:'cat',ph:'/kæt/',cn:'猫',ex:'The cat is small.',art:'cat',topic:'animal',lvl:1,src:'pep3a'},
+  {u:3,en:'fish',ph:'/fɪʃ/',cn:'鱼',ex:'The fish can swim.',art:'fish',topic:'animal',lvl:1,src:'pep3a'},
+  {u:3,en:'bird',ph:'/bɜːd/',cn:'鸟',ex:'The bird can fly.',art:'bird',topic:'animal',lvl:1,src:'pep3a'},
+  {u:3,en:'rabbit',ph:'/ˈræbɪt/',cn:'兔子',ex:'The rabbit is cute.',art:'rabbit',topic:'animal',lvl:1,src:'pep3a'},
+  {u:3,en:'go',ph:'/ɡəʊ/',cn:'去',ex:'Let us go to the zoo.',art:'scene:zoo',topic:'action',lvl:1,src:'pep3a'},
+  {u:3,en:'zoo',ph:'/zuː/',cn:'动物园',ex:'We go to the zoo.',art:'zoo',topic:'place',lvl:1,src:'pep3a'},
+  {u:3,en:'fox',ph:'/fɒks/',cn:'狐狸',ex:'The fox is clever.',art:'fox',topic:'animal',lvl:1,src:'pep3a'},
+  {u:3,en:'panda',ph:'/ˈpændə/',cn:'熊猫',ex:'The panda is black and white.',art:'panda',topic:'animal',lvl:1,src:'pep3a'},
+  {u:3,en:'red panda',ph:'/ˌred ˈpændə/',cn:'小熊猫',ex:'The red panda is cute.',art:'fox',topic:'animal',lvl:1,src:'pep3a'},
+  {u:3,en:'cute',ph:'/kjuːt/',cn:'可爱的',ex:'What a cute rabbit!',art:'heart',topic:'feeling',lvl:1,src:'pep3a'},
+  {u:3,en:'monkey',ph:'/ˈmʌŋki/',cn:'猴子',ex:'The monkey can climb.',art:'monkey',topic:'animal',lvl:1,src:'pep3a'},
+  {u:3,en:'tiger',ph:'/ˈtaɪɡə(r)/',cn:'老虎',ex:'The tiger is strong.',art:'tiger',topic:'animal',lvl:1,src:'pep3a'},
+  {u:3,en:'elephant',ph:'/ˈelɪfənt/',cn:'大象',ex:'The elephant is big.',art:'elephant',topic:'animal',lvl:1,src:'pep3a'},
+  {u:3,en:'lion',ph:'/ˈlaɪən/',cn:'狮子',ex:'The lion is fast.',art:'lion',topic:'animal',lvl:1,src:'pep3a'},
+  {u:3,en:'giraffe',ph:'/dʒəˈrɑːf/',cn:'长颈鹿',ex:'The giraffe is tall.',art:'giraffe',topic:'animal',lvl:1,src:'pep3a'},
+  {u:3,en:'tall',ph:'/tɔːl/',cn:'高的',ex:'The giraffe is tall.',art:'scene:giraffe',topic:'feeling',lvl:1,src:'pep3a'},
+  {u:3,en:'fast',ph:'/fɑːst/',cn:'快的',ex:'The lion is fast.',art:'scene:lion',topic:'feeling',lvl:1,src:'pep3a'},
+  {u:3,en:'Miss',ph:'/mɪs/',cn:'女士；老师',ex:'Good morning, Miss White.',art:'mum',topic:'school',lvl:1,src:'pep3a'},
+
+  // ---- Unit 4 ----
+  {u:4,en:'apple',ph:'/ˈæpl/',cn:'苹果',ex:'I like apples.',art:'apple',topic:'food',lvl:1,src:'pep3a'},
+  {u:4,en:'banana',ph:'/bəˈnɑːnə/',cn:'香蕉',ex:'The banana is yellow.',art:'banana',topic:'food',lvl:1,src:'pep3a'},
+  {u:4,en:'farm',ph:'/fɑːm/',cn:'农场',ex:'This is a big farm.',art:'farm',topic:'place',lvl:1,src:'pep3a'},
+  {u:4,en:'air',ph:'/eə(r)/',cn:'空气',ex:'Plants need fresh air.',art:'air',topic:'plant',lvl:1,src:'pep3a'},
+  {u:4,en:'orange',ph:'/ˈɒrɪndʒ/',cn:'橙子',ex:'I want an orange.',art:'orange',topic:'food',lvl:1,src:'pep3a'},
+  {u:4,en:'grape',ph:'/ɡreɪp/',cn:'葡萄',ex:'The grapes are sweet.',art:'grape',topic:'food',lvl:1,src:'pep3a'},
+  {u:4,en:'school',ph:'/skuːl/',cn:'学校',ex:'I go to school.',art:'school',topic:'school',lvl:1,src:'pep3a'},
+  {u:4,en:'garden',ph:'/ˈɡɑːdn/',cn:'花园',ex:'This is our garden.',art:'garden',topic:'place',lvl:1,src:'pep3a'},
+  {u:4,en:'need',ph:'/niːd/',cn:'需要',ex:'Plants need water.',art:'scene:water',topic:'func',lvl:1,src:'pep3a'},
+  {u:4,en:'water',ph:'/ˈwɔːtə(r)/',cn:'水；浇水',ex:'Please water the flowers.',art:'water',topic:'plant',lvl:1,src:'pep3a'},
+  {u:4,en:'flower',ph:'/ˈflaʊə(r)/',cn:'花',ex:'The flower is red.',art:'flower',topic:'plant',lvl:1,src:'pep3a'},
+  {u:4,en:'grass',ph:'/ɡrɑːs/',cn:'草；草地',ex:'The grass is green.',art:'grass',topic:'plant',lvl:1,src:'pep3a'},
+  {u:4,en:'plant',ph:'/plɑːnt/',cn:'植物；种植',ex:'We plant a tree.',art:'plant',topic:'plant',lvl:1,src:'pep3a'},
+  {u:4,en:'new',ph:'/njuː/',cn:'新的',ex:'This is a new plant.',art:'scene:gift',topic:'feeling',lvl:1,src:'pep3a'},
+  {u:4,en:'tree',ph:'/triː/',cn:'树',ex:'The tree is tall.',art:'tree',topic:'plant',lvl:1,src:'pep3a'},
+  {u:4,en:'sun',ph:'/sʌn/',cn:'太阳',ex:'The sun is big.',art:'sun',topic:'plant',lvl:1,src:'pep3a'},
+  {u:4,en:'give',ph:'/ɡɪv/',cn:'给',ex:'Give us some water.',art:'gift',topic:'action',lvl:1,src:'pep3a'},
+  {u:4,en:'us',ph:'/ʌs/',cn:'我们',ex:'Let us go.',art:'scene:friend',topic:'func',lvl:1,src:'pep3a'},
+  {u:4,en:'them',ph:'/ðem/',cn:'他们；它们',ex:'Water them, please.',art:'scene:friend',topic:'func',lvl:1,src:'pep3a'},
+
+  // ---- Unit 5 ----
+  {u:5,en:'colour',ph:'/ˈkʌlə(r)/',cn:'颜色',ex:'What colour is it?',art:'palette',topic:'colour',lvl:1,src:'pep3a'},
+  {u:5,en:'orange',ph:'/ˈɒrɪndʒ/',cn:'橙红色；橙色的',ex:'It is orange.',art:'chip:#FF8A1F',topic:'colour',lvl:1,src:'pep3a'},
+  {u:5,en:'green',ph:'/ɡriːn/',cn:'绿色；绿色的',ex:'The grass is green.',art:'chip:#4CBF58',topic:'colour',lvl:1,src:'pep3a'},
+  {u:5,en:'red',ph:'/red/',cn:'红色；红色的',ex:'I like red.',art:'chip:#FF4D4D',topic:'colour',lvl:1,src:'pep3a'},
+  {u:5,en:'blue',ph:'/bluː/',cn:'蓝色；蓝色的',ex:'The sky is blue.',art:'chip:#2F8FE0',topic:'colour',lvl:1,src:'pep3a'},
+  {u:5,en:'make',ph:'/meɪk/',cn:'做；使出现',ex:'Let us make a card.',art:'scene:draw',topic:'action',lvl:1,src:'pep3a'},
+  {u:5,en:'purple',ph:'/ˈpɜːpl/',cn:'紫色；紫色的',ex:'I like purple.',art:'chip:#9B5FC0',topic:'colour',lvl:1,src:'pep3a'},
+  {u:5,en:'brown',ph:'/braʊn/',cn:'棕色；棕色的',ex:'The bear is brown.',art:'chip:#8B5A2B',topic:'colour',lvl:1,src:'pep3a'},
+  {u:5,en:'bear',ph:'/beə(r)/',cn:'熊',ex:'The bear is big.',art:'bear',topic:'animal',lvl:1,src:'pep3a'},
+  {u:5,en:'yellow',ph:'/ˈjeləʊ/',cn:'黄色；黄色的',ex:'The duck is yellow.',art:'chip:#FFD21F',topic:'colour',lvl:1,src:'pep3a'},
+  {u:5,en:'duck',ph:'/dʌk/',cn:'鸭子',ex:'The duck can swim.',art:'duck',topic:'animal',lvl:1,src:'pep3a'},
+  {u:5,en:'sea',ph:'/siː/',cn:'海洋',ex:'The sea is blue.',art:'sea',topic:'place',lvl:1,src:'pep3a'},
+  {u:5,en:'pink',ph:'/pɪŋk/',cn:'粉色；粉色的',ex:'It is pink.',art:'chip:#FF85B3',topic:'colour',lvl:1,src:'pep3a'},
+  {u:5,en:'draw',ph:'/drɔː/',cn:'画',ex:'I can draw a flower.',art:'draw',topic:'action',lvl:1,src:'pep3a'},
+  {u:5,en:'white',ph:'/waɪt/',cn:'白色；白色的',ex:'It is white.',art:'chip:#FFFFFF',topic:'colour',lvl:1,src:'pep3a'},
+  {u:5,en:'black',ph:'/blæk/',cn:'黑色；黑色的',ex:'It is black.',art:'chip:#2B2B33',topic:'colour',lvl:1,src:'pep3a'},
+
+  // ---- Unit 6 ----
+  {u:6,en:'old',ph:'/əʊld/',cn:'（多少）岁；旧的',ex:'How old are you?',art:'num:?',topic:'feeling',lvl:1,src:'pep3a'},
+  {u:6,en:'five',ph:'/faɪv/',cn:'五',ex:'I am five.',art:'num:5',topic:'number',lvl:1,src:'pep3a'},
+  {u:6,en:'year',ph:'/jɪə(r)/',cn:'年；年纪',ex:'One year old.',art:'scene:clock',topic:'time',lvl:1,src:'pep3a'},
+  {u:6,en:'one',ph:'/wʌn/',cn:'一',ex:'One apple.',art:'num:1',topic:'number',lvl:1,src:'pep3a'},
+  {u:6,en:'two',ph:'/tuː/',cn:'二',ex:'Two bananas.',art:'num:2',topic:'number',lvl:1,src:'pep3a'},
+  {u:6,en:'three',ph:'/θriː/',cn:'三',ex:'Three birds.',art:'num:3',topic:'number',lvl:1,src:'pep3a'},
+  {u:6,en:'four',ph:'/fɔː(r)/',cn:'四',ex:'Four cats.',art:'num:4',topic:'number',lvl:1,src:'pep3a'},
+  {u:6,en:'ten',ph:'/ten/',cn:'十',ex:'Ten fingers.',art:'num:10',topic:'number',lvl:1,src:'pep3a'},
+  {u:6,en:'six',ph:'/sɪks/',cn:'六',ex:'Six ducks.',art:'num:6',topic:'number',lvl:1,src:'pep3a'},
+  {u:6,en:'seven',ph:'/ˈsevn/',cn:'七',ex:'Seven colours.',art:'num:7',topic:'number',lvl:1,src:'pep3a'},
+  {u:6,en:'eight',ph:'/eɪt/',cn:'八',ex:'Eight grapes.',art:'num:8',topic:'number',lvl:1,src:'pep3a'},
+  {u:6,en:'nine',ph:'/naɪn/',cn:'九',ex:'Nine rabbits.',art:'num:9',topic:'number',lvl:1,src:'pep3a'},
+  {u:6,en:"o'clock",ph:'/əˈklɒk/',cn:'……点钟',ex:"It is eight o'clock.",art:'clock',topic:'time',lvl:1,src:'pep3a'},
+  {u:6,en:'cut',ph:'/kʌt/',cn:'切',ex:'Cut the apple.',art:'cut',topic:'action',lvl:1,src:'pep3a'},
+  {u:6,en:'piece',ph:'/piːs/',cn:'块；片',ex:'One piece, please.',art:'piece',topic:'thing',lvl:1,src:'pep3a'},
+
+  // ---- Unit 7（三下 U1 新同学新朋友）----
+  {u:7,en:'where',ph:'/weə(r)/',cn:'在哪里；到哪里',ex:'Where are you from?',art:'scene:school',topic:'func',lvl:2,src:'pep3b'},
+  {u:7,en:'from',ph:'/frɒm/',cn:'从……来；来自',ex:'I am from China.',art:'scene:school',topic:'func',lvl:2,src:'pep3b'},
+  {u:7,en:'about',ph:'/əˈbaʊt/',cn:'大约；关于',ex:'About ten apples.',art:'scene:apple',topic:'func',lvl:2,src:'pep3b'},
+  {u:7,en:'today',ph:'/təˈdeɪ/',cn:'今天',ex:'Today is a good day.',art:'sun',topic:'time',lvl:2,src:'pep3b'},
+  {u:7,en:'teacher',ph:'/ˈtiːtʃə(r)/',cn:'老师',ex:'She is my teacher.',art:'teacher',topic:'school',lvl:2,src:'pep3b'},
+  {u:7,en:'student',ph:'/ˈstjuːdnt/',cn:'学生',ex:'I am a student.',art:'scene:teacher',topic:'school',lvl:2,src:'pep3b'},
+  {u:7,en:'after',ph:'/ˈɑːftə(r)/',cn:'在……之后',ex:'Read after me, please.',art:'scene:say',topic:'func',lvl:2,src:'pep3b'},
+  {u:7,en:'who',ph:'/huː/',cn:'谁；什么人',ex:'Who is that girl?',art:'scene:me',topic:'func',lvl:2,src:'pep3b'},
+  {u:7,en:'girl',ph:'/ɡɜːl/',cn:'女孩',ex:'That girl is my friend.',art:'girl',topic:'family',lvl:2,src:'pep3b'},
+  {u:7,en:'neighbour',ph:'/ˈneɪbə(r)/',cn:'邻居',ex:'She is my neighbour.',art:'scene:home',topic:'family',lvl:2,src:'pep3b'},
+  {u:7,en:'boy',ph:'/bɔɪ/',cn:'男孩',ex:'That boy is my classmate.',art:'boy',topic:'family',lvl:2,src:'pep3b'},
+  {u:7,en:'woman',ph:'/ˈwʊmən/',cn:'成年女子；妇女',ex:'She is a nice woman.',art:'woman',topic:'family',lvl:2,src:'pep3b'},
+  {u:7,en:'man',ph:'/mæn/',cn:'成年男子；男人',ex:'He is a tall man.',art:'man',topic:'family',lvl:2,src:'pep3b'},
+  {u:7,en:'Mr',ph:'/ˈmɪstə(r)/',cn:'先生',ex:'Good morning, Mr Li.',art:'man',topic:'family',lvl:2,src:'pep3b'},
+  {u:7,en:'classmate',ph:'/ˈklɑːsmeɪt/',cn:'同班同学',ex:'He is my classmate.',art:'scene:friend',topic:'school',lvl:2,src:'pep3b'},
+  {u:7,en:'he',ph:'/hiː/',cn:'他',ex:'He is my brother.',art:'scene:me',topic:'func',lvl:2,src:'pep3b'},
+  {u:7,en:'English',ph:'/ˈɪŋɡlɪʃ/',cn:'英语；英语的',ex:'I like English.',art:'book',topic:'school',lvl:2,src:'pep3b'},
+  {u:7,en:'she',ph:'/ʃiː/',cn:'她',ex:'She is my sister.',art:'scene:me',topic:'func',lvl:2,src:'pep3b'},
+  {u:7,en:'very',ph:'/ˈveri/',cn:'很；非常',ex:'Thank you very much.',art:'scene:heart',topic:'func',lvl:2,src:'pep3b'},
+  {u:7,en:'UK',ph:'/ˌjuːˈkeɪ/',cn:'英国',ex:'I am from the UK.',art:'flagUK',topic:'place',lvl:2,src:'pep3b'},
+  {u:7,en:'China',ph:'/ˈtʃaɪnə/',cn:'中国',ex:'I am from China.',art:'flagCN',topic:'place',lvl:2,src:'pep3b'},
+  {u:7,en:'Canada',ph:'/ˈkænədə/',cn:'加拿大',ex:'He is from Canada.',art:'flagCA',topic:'place',lvl:2,src:'pep3b'},
+  {u:7,en:'USA',ph:'/ˌjuː es ˈeɪ/',cn:'美国',ex:'She is from the USA.',art:'flagUS',topic:'place',lvl:2,src:'pep3b'},
+
+  // ---- Unit 8（三下 U2 我的小动物）----
+  {u:8,en:'has',ph:'/hæz/',cn:'有（第三人称单数）',ex:'It has long ears.',art:'scene:gift',topic:'func',lvl:2,src:'pep3b'},
+  {u:8,en:'long',ph:'/lɒŋ/',cn:'长的',ex:'It has a long tail.',art:'scene:giraffe',topic:'feeling',lvl:2,src:'pep3b'},
+  {u:8,en:'body',ph:'/ˈbɒdi/',cn:'身体',ex:'Wash your body.',art:'body',topic:'body',lvl:2,src:'pep3b'},
+  {u:8,en:'short',ph:'/ʃɔːt/',cn:'短的；矮的',ex:'It has a short tail.',art:'scene:bird',topic:'feeling',lvl:2,src:'pep3b'},
+  {u:8,en:'leg',ph:'/leɡ/',cn:'腿',ex:'It has four legs.',art:'body',topic:'body',lvl:2,src:'pep3b'},
+  {u:8,en:'right',ph:'/raɪt/',cn:'对的；正确的',ex:'You are right!',art:'scene:smile',topic:'feeling',lvl:2,src:'pep3b'},
+  {u:8,en:'fat',ph:'/fæt/',cn:'胖的；肥的',ex:'The cat is fat.',art:'scene:cat',topic:'feeling',lvl:2,src:'pep3b'},
+  {u:8,en:'thin',ph:'/θɪn/',cn:'瘦的',ex:'The monkey is thin.',art:'scene:monkey',topic:'feeling',lvl:2,src:'pep3b'},
+  {u:8,en:'slow',ph:'/sləʊ/',cn:'慢的',ex:'The fish is slow.',art:'scene:fish',topic:'feeling',lvl:2,src:'pep3b'},
+  {u:8,en:'love',ph:'/lʌv/',cn:'爱；喜爱',ex:'I love my mum.',art:'heart',topic:'action',lvl:2,src:'pep3b'},
+  {u:8,en:'tail',ph:'/teɪl/',cn:'尾巴',ex:'The rabbit has a short tail.',art:'scene:rabbit',topic:'body',lvl:2,src:'pep3b'},
+  {u:8,en:'her',ph:'/hɜː(r)/',cn:'她的；她',ex:'This is her card.',art:'scene:me',topic:'func',lvl:2,src:'pep3b'},
+  {u:8,en:'gift',ph:'/ɡɪft/',cn:'礼物',ex:'This is a gift for mum.',art:'gift',topic:'thing',lvl:2,src:'pep3b'},
+  {u:8,en:'picture',ph:'/ˈpɪktʃə(r)/',cn:'图画；照片',ex:'Look at my picture.',art:'draw',topic:'school',lvl:2,src:'pep3b'},
+  {u:8,en:'card',ph:'/kɑːd/',cn:'卡片；贺卡',ex:'I make a card.',art:'card',topic:'school',lvl:2,src:'pep3b'},
+  {u:8,en:'sing',ph:'/sɪŋ/',cn:'唱歌',ex:'I can sing a song.',art:'sing',topic:'action',lvl:2,src:'pep3b'},
+  {u:8,en:'dance',ph:'/dɑːns/',cn:'跳舞',ex:'She can dance.',art:'dance',topic:'action',lvl:2,src:'pep3b'},
+  {u:8,en:'face',ph:'/feɪs/',cn:'脸',ex:'Wash your face.',art:'face',topic:'body',lvl:2,src:'pep3b'},
+  {u:8,en:'all',ph:'/ɔːl/',cn:'全部；所有',ex:'All my friends are here.',art:'scene:friend',topic:'func',lvl:2,src:'pep3b'},
+  {u:8,en:'so',ph:'/səʊ/',cn:'这么；那么',ex:'It is so cute!',art:'scene:heart',topic:'func',lvl:2,src:'pep3b'},
+  {u:8,en:'talk',ph:'/tɔːk/',cn:'说话；交谈',ex:'Let us talk.',art:'say',topic:'action',lvl:2,src:'pep3b'},
+  {u:8,en:'song',ph:'/sɒŋ/',cn:'歌曲',ex:'I like this song.',art:'sing',topic:'school',lvl:2,src:'pep3b'},
+  {u:8,en:'or',ph:'/ɔː(r)/',cn:'或者；还是',ex:'Tea or milk?',art:'scene:milk',topic:'func',lvl:2,src:'pep3b'},
+  {u:8,en:'much',ph:'/mʌtʃ/',cn:'许多；很',ex:'Thank you very much.',art:'scene:apple',topic:'func',lvl:2,src:'pep3b'},
+
+  // ---- Unit 9（三下 U3 感官与文具）----
+  {u:9,en:'eraser',ph:'/ɪˈreɪzə(r)/',cn:'橡皮',ex:'This is my eraser.',art:'eraser',topic:'school',lvl:2,src:'pep3b'},
+  {u:9,en:'find',ph:'/faɪnd/',cn:'找到；找回',ex:'I can not find my pen.',art:'scene:eye',topic:'action',lvl:2,src:'pep3b'},
+  {u:9,en:'ruler',ph:'/ˈruːlə(r)/',cn:'尺子',ex:'It is a long ruler.',art:'ruler',topic:'school',lvl:2,src:'pep3b'},
+  {u:9,en:'pen',ph:'/pen/',cn:'钢笔',ex:'This is my new pen.',art:'pen',topic:'school',lvl:2,src:'pep3b'},
+  {u:9,en:'pencil',ph:'/ˈpensl/',cn:'铅笔',ex:'I have two pencils.',art:'pencil',topic:'school',lvl:2,src:'pep3b'},
+  {u:9,en:'book',ph:'/bʊk/',cn:'书',ex:'I read a book.',art:'book',topic:'school',lvl:2,src:'pep3b'},
+  {u:9,en:'bag',ph:'/bæɡ/',cn:'包；书包',ex:'My bag is pink.',art:'bag',topic:'school',lvl:2,src:'pep3b'},
+  {u:9,en:'paper',ph:'/ˈpeɪpə(r)/',cn:'纸',ex:'Give me some paper.',art:'paper',topic:'school',lvl:2,src:'pep3b'},
+  {u:9,en:'these',ph:'/ðiːz/',cn:'这些',ex:'These are my books.',art:'scene:book',topic:'func',lvl:2,src:'pep3b'},
+  {u:9,en:'see',ph:'/siː/',cn:'看见',ex:'I see a bird.',art:'eye',topic:'sense',lvl:2,src:'pep3b'},
+  {u:9,en:'smell',ph:'/smel/',cn:'闻；嗅',ex:'Smell the flower.',art:'flower',topic:'sense',lvl:2,src:'pep3b'},
+  {u:9,en:'taste',ph:'/teɪst/',cn:'尝；品尝',ex:'Taste the apple.',art:'apple',topic:'sense',lvl:2,src:'pep3b'},
+  {u:9,en:'hear',ph:'/hɪə(r)/',cn:'听见；听到',ex:'I hear a dog.',art:'ear',topic:'sense',lvl:2,src:'pep3b'},
+  {u:9,en:'touch',ph:'/tʌtʃ/',cn:'摸；触摸',ex:'Touch your nose.',art:'hand',topic:'sense',lvl:2,src:'pep3b'},
+  {u:9,en:'learn',ph:'/lɜːn/',cn:'学；学习',ex:'I learn English.',art:'book',topic:'action',lvl:2,src:'pep3b'},
+  {u:9,en:'nose',ph:'/nəʊz/',cn:'鼻子',ex:'This is my nose.',art:'nose',topic:'body',lvl:2,src:'pep3b'},
+  {u:9,en:'tongue',ph:'/tʌŋ/',cn:'舌头',ex:'This is my tongue.',art:'mouth',topic:'body',lvl:2,src:'pep3b'},
+  {u:9,en:'class',ph:'/klɑːs/',cn:'班级；课',ex:'English class is fun.',art:'school',topic:'school',lvl:2,src:'pep3b'},
+  {u:9,en:'computer',ph:'/kəmˈpjuːtə(r)/',cn:'电脑',ex:'The computer is new.',art:'computer',topic:'school',lvl:2,src:'pep3b'},
+
+  // ---- Unit 10（三下 U4 美味的食物）----
+  {u:10,en:'breakfast',ph:'/ˈbrekfəst/',cn:'早餐',ex:'I have breakfast at home.',art:'scene:plate',topic:'food',lvl:2,src:'pep3b'},
+  {u:10,en:'time',ph:'/taɪm/',cn:'时间',ex:'It is time for breakfast.',art:'clock',topic:'time',lvl:2,src:'pep3b'},
+  {u:10,en:'bread',ph:'/bred/',cn:'面包',ex:'I like bread.',art:'bread',topic:'food',lvl:2,src:'pep3b'},
+  {u:10,en:'egg',ph:'/eɡ/',cn:'蛋；鸡蛋',ex:'One egg, please.',art:'egg',topic:'food',lvl:2,src:'pep3b'},
+  {u:10,en:'milk',ph:'/mɪlk/',cn:'牛奶',ex:'I drink milk.',art:'milk',topic:'food',lvl:2,src:'pep3b'},
+  {u:10,en:'noodle',ph:'/ˈnuːdl/',cn:'面条',ex:'I like noodles.',art:'noodle',topic:'food',lvl:2,src:'pep3b'},
+  {u:10,en:'juice',ph:'/dʒuːs/',cn:'果汁',ex:'The juice is sweet.',art:'juice',topic:'food',lvl:2,src:'pep3b'},
+  {u:10,en:'rice',ph:'/raɪs/',cn:'米饭；大米',ex:'I eat rice.',art:'rice',topic:'food',lvl:2,src:'pep3b'},
+  {u:10,en:'meat',ph:'/miːt/',cn:'肉',ex:'The dog likes meat.',art:'meat',topic:'food',lvl:2,src:'pep3b'},
+  {u:10,en:'vegetable',ph:'/ˈvedʒtəbl/',cn:'蔬菜',ex:'Eat some vegetables.',art:'vegetable',topic:'food',lvl:2,src:'pep3b'},
+  {u:10,en:'healthy',ph:'/ˈhelθi/',cn:'健康的',ex:'Vegetables are healthy.',art:'heart',topic:'feeling',lvl:2,src:'pep3b'},
+  {u:10,en:'plate',ph:'/pleɪt/',cn:'盘子',ex:'Put it on the plate.',art:'plate',topic:'thing',lvl:2,src:'pep3b'},
+  {u:10,en:'soup',ph:'/suːp/',cn:'汤',ex:'The soup is hot.',art:'soup',topic:'food',lvl:2,src:'pep3b'},
+  {u:10,en:'fruit',ph:'/fruːt/',cn:'水果',ex:'I like fruit.',art:'fruit',topic:'food',lvl:2,src:'pep3b'},
+  {u:10,en:'colourful',ph:'/ˈkʌləfl/',cn:'五彩缤纷的',ex:'A colourful plate.',art:'palette',topic:'feeling',lvl:2,src:'pep3b'},
+  {u:10,en:'candy',ph:'/ˈkændi/',cn:'糖果',ex:'The candy is sweet.',art:'candy',topic:'food',lvl:2,src:'pep3b'},
+  {u:10,en:'yummy',ph:'/ˈjʌmi/',cn:'很好吃的',ex:'It is yummy!',art:'scene:candy',topic:'feeling',lvl:2,src:'pep3b'},
+
+  // ---- Unit 11（三下 U5 我的小房间）----
+  {u:11,en:'at',ph:'/æt/',cn:'在（某处）',ex:'I am at home.',art:'scene:home',topic:'func',lvl:2,src:'pep3b'},
+  {u:11,en:'home',ph:'/həʊm/',cn:'家；住所',ex:'Welcome to my home.',art:'home',topic:'home',lvl:2,src:'pep3b'},
+  {u:11,en:'boat',ph:'/bəʊt/',cn:'小船',ex:'The boat is small.',art:'boat',topic:'thing',lvl:2,src:'pep3b'},
+  {u:11,en:'cool',ph:'/kuːl/',cn:'酷的；绝妙的',ex:'Your car is cool!',art:'scene:car',topic:'feeling',lvl:2,src:'pep3b'},
+  {u:11,en:'keep',ph:'/kiːp/',cn:'保留；留着',ex:'You can keep it.',art:'gift',topic:'action',lvl:2,src:'pep3b'},
+  {u:11,en:'ball',ph:'/bɔːl/',cn:'球',ex:'Where is my ball?',art:'ball',topic:'thing',lvl:2,src:'pep3b'},
+  {u:11,en:'doll',ph:'/dɒl/',cn:'玩偶；娃娃',ex:'The doll is cute.',art:'doll',topic:'thing',lvl:2,src:'pep3b'},
+  {u:11,en:'car',ph:'/kɑː(r)/',cn:'小汽车',ex:'This is my car.',art:'car',topic:'thing',lvl:2,src:'pep3b'},
+  {u:11,en:'on',ph:'/ɒn/',cn:'在……上面',ex:'It is on the box.',art:'pos_on',topic:'func',lvl:2,src:'pep3b'},
+  {u:11,en:'shelf',ph:'/ʃelf/',cn:'架子',ex:'It is on the shelf.',art:'shelf',topic:'thing',lvl:2,src:'pep3b'},
+  {u:11,en:'in',ph:'/ɪn/',cn:'在……里面',ex:'It is in the box.',art:'pos_in',topic:'func',lvl:2,src:'pep3b'},
+  {u:11,en:'box',ph:'/bɒks/',cn:'盒子',ex:'It is a big box.',art:'box',topic:'thing',lvl:2,src:'pep3b'},
+  {u:11,en:'now',ph:'/naʊ/',cn:'现在',ex:'Let us go now.',art:'clock',topic:'time',lvl:2,src:'pep3b'},
+  {u:11,en:'cap',ph:'/kæp/',cn:'帽子',ex:'My cap is blue.',art:'cap',topic:'thing',lvl:2,src:'pep3b'},
+  {u:11,en:'map',ph:'/mæp/',cn:'地图',ex:'Look at the map.',art:'map',topic:'thing',lvl:2,src:'pep3b'},
+  {u:11,en:'under',ph:'/ˈʌndə(r)/',cn:'在……下面',ex:'It is under the box.',art:'pos_under',topic:'func',lvl:2,src:'pep3b'},
+  {u:11,en:'still',ph:'/stɪl/',cn:'仍然；还是',ex:'It is still there.',art:'scene:ball',topic:'func',lvl:2,src:'pep3b'},
+  {u:11,en:'put',ph:'/pʊt/',cn:'放；安置',ex:'Put it in the box.',art:'scene:box',topic:'action',lvl:2,src:'pep3b'},
+
+  // ---- Unit 12（三下 U6 数字与购物）----
+  {u:12,en:'eleven',ph:'/ɪˈlevn/',cn:'十一',ex:'Eleven apples.',art:'num:11',topic:'number',lvl:2,src:'pep3b'},
+  {u:12,en:'twelve',ph:'/twelv/',cn:'十二',ex:'Twelve eggs.',art:'num:12',topic:'number',lvl:2,src:'pep3b'},
+  {u:12,en:'thirteen',ph:'/ˌθɜːˈtiːn/',cn:'十三',ex:'Thirteen ducks.',art:'num:13',topic:'number',lvl:2,src:'pep3b'},
+  {u:12,en:'fourteen',ph:'/ˌfɔːˈtiːn/',cn:'十四',ex:'Fourteen books.',art:'num:14',topic:'number',lvl:2,src:'pep3b'},
+  {u:12,en:'fifteen',ph:'/ˌfɪfˈtiːn/',cn:'十五',ex:'Fifteen candles.',art:'num:15',topic:'number',lvl:2,src:'pep3b'},
+  {u:12,en:'sixteen',ph:'/ˌsɪksˈtiːn/',cn:'十六',ex:'Sixteen grapes.',art:'num:16',topic:'number',lvl:2,src:'pep3b'},
+  {u:12,en:'seventeen',ph:'/ˌsevnˈtiːn/',cn:'十七',ex:'Seventeen pens.',art:'num:17',topic:'number',lvl:2,src:'pep3b'},
+  {u:12,en:'eighteen',ph:'/ˌeɪˈtiːn/',cn:'十八',ex:'Eighteen cars.',art:'num:18',topic:'number',lvl:2,src:'pep3b'},
+  {u:12,en:'nineteen',ph:'/ˌnaɪnˈtiːn/',cn:'十九',ex:'Nineteen eggs.',art:'num:19',topic:'number',lvl:2,src:'pep3b'},
+  {u:12,en:'twenty',ph:'/ˈtwenti/',cn:'二十',ex:'Twenty books.',art:'num:20',topic:'number',lvl:2,src:'pep3b'},
+  {u:12,en:'choose',ph:'/tʃuːz/',cn:'选择；挑选',ex:'Choose one, please.',art:'scene:apple',topic:'action',lvl:2,src:'pep3b'},
+  {u:12,en:'save',ph:'/seɪv/',cn:'储蓄；攒钱',ex:'I save my money.',art:'piggy',topic:'action',lvl:2,src:'pep3b'},
+  {u:12,en:'spend',ph:'/spend/',cn:'花（钱）；用',ex:'I spend ten yuan.',art:'piggy',topic:'action',lvl:2,src:'pep3b'},
+  {u:12,en:'piggy bank',ph:'/ˈpɪɡi bæŋk/',cn:'猪形储钱罐',ex:'This is my piggy bank.',art:'piggy',topic:'thing',lvl:2,src:'pep3b'},
+  {u:12,en:'pay',ph:'/peɪ/',cn:'付费',ex:'I pay ten yuan.',art:'piggy',topic:'action',lvl:2,src:'pep3b'},
+  {u:12,en:'back',ph:'/bæk/',cn:'回到原处；回',ex:'Come back home.',art:'scene:home',topic:'func',lvl:2,src:'pep3b'},
+
+  // ---- Unit 0 补充池（u=0，功能词/主题拓展，由家长开关控制混入）----
+  {u:0,en:'I',ph:'/aɪ/',cn:'我',ex:'I am a girl.',art:'scene:me',topic:'func',lvl:3,src:'func'},
+  {u:0,en:'you',ph:'/juː/',cn:'你；你们',ex:'You are my friend.',art:'scene:friend',topic:'func',lvl:3,src:'func'},
+  {u:0,en:'we',ph:'/wiː/',cn:'我们',ex:'We are friends.',art:'scene:friend',topic:'func',lvl:3,src:'func'},
+  {u:0,en:'they',ph:'/ðeɪ/',cn:'他们；它们',ex:'They are cute.',art:'scene:friend',topic:'func',lvl:3,src:'func'},
+  {u:0,en:'it',ph:'/ɪt/',cn:'它',ex:'It is a cat.',art:'scene:cat',topic:'func',lvl:3,src:'func'},
+  {u:0,en:'is',ph:'/ɪz/',cn:'是',ex:'It is red.',art:'scene:heart',topic:'func',lvl:3,src:'func'},
+  {u:0,en:'are',ph:'/ɑː(r)/',cn:'是',ex:'They are big.',art:'scene:heart',topic:'func',lvl:3,src:'func'},
+  {u:0,en:'am',ph:'/æm/',cn:'是',ex:'I am eight.',art:'scene:heart',topic:'func',lvl:3,src:'func'},
+  {u:0,en:'what',ph:'/wɒt/',cn:'什么',ex:'What is it?',art:'scene:eye',topic:'func',lvl:3,src:'func'},
+  {u:0,en:'how',ph:'/haʊ/',cn:'怎样；如何',ex:'How are you?',art:'scene:smile',topic:'func',lvl:3,src:'func'},
+  {u:0,en:'my',ph:'/maɪ/',cn:'我的',ex:'This is my book.',art:'scene:gift',topic:'func',lvl:3,src:'func'},
+  {u:0,en:'yes',ph:'/jes/',cn:'是的；好',ex:'Yes, I do.',art:'scene:smile',topic:'func',lvl:3,src:'func'},
+  {u:0,en:'no',ph:'/nəʊ/',cn:'不；不是',ex:'No, it is not.',art:'scene:mouth',topic:'func',lvl:3,src:'func'},
+  {u:0,en:'play',ph:'/pleɪ/',cn:'玩；踢（球）',ex:'Let us play!',art:'ball',topic:'action',lvl:3,src:'func'},
+  {u:0,en:'read',ph:'/riːd/',cn:'读；阅读',ex:'I read a book.',art:'book',topic:'action',lvl:3,src:'func'},
+  {u:0,en:'eat',ph:'/iːt/',cn:'吃',ex:'I eat an apple.',art:'apple',topic:'action',lvl:3,src:'func'},
+  {u:0,en:'drink',ph:'/drɪŋk/',cn:'喝',ex:'I drink milk.',art:'milk',topic:'action',lvl:3,src:'func'},
+  {u:0,en:'run',ph:'/rʌn/',cn:'跑',ex:'The dog can run.',art:'dog',topic:'action',lvl:3,src:'func'},
+  {u:0,en:'look',ph:'/lʊk/',cn:'看；瞧',ex:'Look at me!',art:'eye',topic:'action',lvl:3,src:'func'},
+  {u:0,en:'happy',ph:'/ˈhæpi/',cn:'快乐的',ex:'I am happy.',art:'scene:smile',topic:'feeling',lvl:3,src:'func'},
+  // ---- 补充池：阶段2 功能词补丁 ----
+  {u:0,en:'your',ph:'/jɔː(r)/',cn:'你的；你们的',ex:'Is this your bag?',art:'scene:gift',topic:'func',lvl:3,src:'func'},
+  {u:0,en:'our',ph:'/ˈaʊə(r)/',cn:'我们的',ex:'This is our school.',art:'scene:family',topic:'func',lvl:3,src:'func'},
+  {u:0,en:'him',ph:'/hɪm/',cn:'他（宾格）',ex:'I like him.',art:'scene:dad',topic:'func',lvl:3,src:'func'},
+  {u:0,en:'the',ph:'/ðə/',cn:'这个；那个（冠词）',ex:'The cat is cute.',art:'scene:cat',topic:'func',lvl:3,src:'func'},
+  {u:0,en:'this',ph:'/ðɪs/',cn:'这；这个',ex:'This is my book.',art:'scene:gift',topic:'func',lvl:3,src:'func'},
+  {u:0,en:'that',ph:'/ðæt/',cn:'那；那个',ex:'That is my dog.',art:'scene:dog',topic:'func',lvl:3,src:'func'},
+  {u:0,en:'those',ph:'/ðəʊz/',cn:'那些',ex:'Those are my cats.',art:'scene:bird',topic:'func',lvl:3,src:'func'},
+  {u:0,en:'why',ph:'/waɪ/',cn:'为什么',ex:'Why are you happy?',art:'scene:smile',topic:'func',lvl:3,src:'func'},
+  {u:0,en:'when',ph:'/wen/',cn:'什么时候',ex:'When do we go?',art:'scene:clock',topic:'func',lvl:3,src:'func'},
+  {u:0,en:'to',ph:'/tuː/',cn:'到；向',ex:'I go to school.',art:'scene:school',topic:'func',lvl:3,src:'func'},
+  {u:0,en:'for',ph:'/fɔː(r)/',cn:'给；为了',ex:'This is for you.',art:'scene:gift',topic:'func',lvl:3,src:'func'},
+  {u:0,en:'with',ph:'/wɪð/',cn:'和……一起',ex:'I play with you.',art:'scene:friend',topic:'func',lvl:3,src:'func'},
+  {u:0,en:'here',ph:'/hɪə(r)/',cn:'这里',ex:'Come here, please.',art:'scene:home',topic:'place',lvl:3,src:'func'},
+  {u:0,en:'there',ph:'/ðeə(r)/',cn:'那里',ex:'Put it there.',art:'scene:map',topic:'place',lvl:3,src:'func'},
+  {u:0,en:'come',ph:'/kʌm/',cn:'来',ex:'Come with me!',art:'scene:friend',topic:'action',lvl:3,src:'func'},
+  {u:0,en:'want',ph:'/wɒnt/',cn:'想要',ex:'I want milk.',art:'scene:milk',topic:'action',lvl:3,src:'func'},
+  {u:0,en:'do',ph:'/duː/',cn:'做；（助动词）',ex:'Do you like it?',art:'scene:hand',topic:'func',lvl:3,src:'func'},
+  {u:0,en:'let',ph:'/let/',cn:'让',ex:'Let us play!',art:'scene:friend',topic:'func',lvl:3,src:'func'},
+  {u:0,en:'wash',ph:'/wɒʃ/',cn:'洗',ex:'Wash your face.',art:'scene:water',topic:'action',lvl:3,src:'func'},
+  {u:0,en:'open',ph:'/ˈəʊpən/',cn:'打开',ex:'Open your book.',art:'scene:book',topic:'action',lvl:3,src:'func'},
+  {u:0,en:'close',ph:'/kləʊz/',cn:'关上',ex:'Close your book.',art:'scene:box',topic:'action',lvl:3,src:'func'},
+  {u:0,en:'write',ph:'/raɪt/',cn:'写',ex:'I write my name.',art:'scene:pencil',topic:'action',lvl:3,src:'func'},
+  {u:0,en:'morning',ph:'/ˈmɔːnɪŋ/',cn:'早晨；上午',ex:'Good morning!',art:'scene:sun',topic:'time',lvl:3,src:'func'},
+  {u:0,en:'afternoon',ph:'/ˌɑːftəˈnuːn/',cn:'下午',ex:'Good afternoon!',art:'scene:school',topic:'time',lvl:3,src:'func'},
+  {u:0,en:'evening',ph:'/ˈiːvnɪŋ/',cn:'傍晚；晚上',ex:'Good evening!',art:'scene:home',topic:'time',lvl:3,src:'func'},
+  {u:0,en:'night',ph:'/naɪt/',cn:'夜晚',ex:'Good night!',art:'scene:clock',topic:'time',lvl:3,src:'func'},
+  {u:0,en:'tomorrow',ph:'/təˈmɒrəʊ/',cn:'明天',ex:'See you tomorrow!',art:'scene:card',topic:'time',lvl:3,src:'func'},
+  {u:0,en:'birthday',ph:'/ˈbɜːθdeɪ/',cn:'生日',ex:'Happy birthday!',art:'scene:gift',topic:'time',lvl:3,src:'func'},
+  {u:0,en:'day',ph:'/deɪ/',cn:'天；日子',ex:'Have a nice day!',art:'scene:sun',topic:'time',lvl:3,src:'func'},
+  {u:0,en:'week',ph:'/wiːk/',cn:'星期；周',ex:'A new week!',art:'scene:clock',topic:'time',lvl:3,src:'func'},
+  {u:0,en:'sunny',ph:'/ˈsʌni/',cn:'晴朗的',ex:'It is sunny.',art:'scene:sun',topic:'weather',lvl:3,src:'func'},
+  {u:0,en:'rainy',ph:'/ˈreɪni/',cn:'下雨的',ex:'It is rainy.',art:'scene:water',topic:'weather',lvl:3,src:'func'},
+  {u:0,en:'windy',ph:'/ˈwɪndi/',cn:'有风的',ex:'It is windy.',art:'scene:air',topic:'weather',lvl:3,src:'func'},
+  {u:0,en:'cloudy',ph:'/ˈklaʊdi/',cn:'多云的',ex:'It is cloudy.',art:'scene:air',topic:'weather',lvl:3,src:'func'},
+  {u:0,en:'hot',ph:'/hɒt/',cn:'热的',ex:'It is hot.',art:'scene:sun',topic:'weather',lvl:3,src:'func'},
+  {u:0,en:'cold',ph:'/kəʊld/',cn:'冷的',ex:'It is cold.',art:'scene:water',topic:'weather',lvl:3,src:'func'},
+  {u:0,en:'please',ph:'/pliːz/',cn:'请',ex:'This one, please.',art:'scene:apple',topic:'func',lvl:3,src:'func'},
+  {u:0,en:'thanks',ph:'/θæŋks/',cn:'谢谢',ex:'Thanks, Mum!',art:'scene:gift',topic:'func',lvl:3,src:'func'},
+  {u:0,en:'hello',ph:'/həˈləʊ/',cn:'你好',ex:'Hello, my friend!',art:'scene:wave',topic:'func',lvl:3,src:'func'},
+  {u:0,en:'sorry',ph:'/ˈsɒri/',cn:'对不起',ex:'I am sorry.',art:'scene:mouth',topic:'func',lvl:3,src:'func'},
+  {u:0,en:'not',ph:'/nɒt/',cn:'不；没有',ex:'It is not red.',art:'scene:cut',topic:'func',lvl:3,src:'func'}
+];
+
+WORDS.forEach(function(w){ w.id = w.u + '-' + w.en; });
+function getWord(id){
+  for(var i=0;i<WORDS.length;i++){ if(WORDS[i].id===id) return WORDS[i]; }
+  return null;
+}
+function unitWords(u){ return WORDS.filter(function(w){ return w.u===u; }); }
+function unitById(no){
+  for(var i=0;i<UNITS.length;i++){ if(UNITS[i].no===no) return UNITS[i]; }
+  return UNITS[0];
+}
+
+/* ---------- 2. 内联 SVG 插图（零外部图片依赖） ---------- */
+var BG = '<circle cx="50" cy="50" r="46" fill="#FFF6EC"/>';
+var EYES = function(x1,x2,y,r,col){ return '<circle cx="'+x1+'" cy="'+y+'" r="'+r+'" fill="'+(col||'#3D3A4E')+'"/><circle cx="'+x2+'" cy="'+y+'" r="'+r+'" fill="'+(col||'#3D3A4E')+'"/><circle cx="'+(x1+1.4)+'" cy="'+(y-1.4)+'" r="'+(r*0.36)+'" fill="#fff"/><circle cx="'+(x2+1.4)+'" cy="'+(y-1.4)+'" r="'+(r*0.36)+'" fill="#fff"/>'; };
+var SMILE_M = '<path d="M42 66q8 7 16 0" stroke="#3D3A4E" stroke-width="3.4" fill="none" stroke-linecap="round"/>';
+
+var ART = {
+  // —— 身体部位 & 动作 ——
+  ear: '<circle cx="50" cy="52" rx="34" ry="38" fill="#FFF0EC"/>'+
+       '<path d="M56 18c20-2 30 20 22 40-4 11-13 20-21 22-8-14-10-38-1-62z" fill="#FFC0B4"/>'+
+       '<path d="M63 38c9 3 11 17 5 27" stroke="#F79A8E" stroke-width="6" fill="none" stroke-linecap="round"/>',
+  hand: BG+'<rect x="30" y="46" width="40" height="34" rx="16" fill="#FFC0B4"/>'+
+        '<rect x="34" y="20" width="9" height="32" rx="4.5" fill="#FFC0B4"/>'+
+        '<rect x="46" y="16" width="9" height="36" rx="4.5" fill="#FFC0B4"/>'+
+        '<rect x="58" y="22" width="9" height="30" rx="4.5" fill="#FFC0B4"/>'+
+        '<path d="M30 56c-8 0-12 5-11 12" stroke="#FFC0B4" stroke-width="9" fill="none" stroke-linecap="round"/>',
+  eye: BG+'<ellipse cx="50" cy="52" rx="36" ry="24" fill="#fff" stroke="#3D3A4E" stroke-width="3"/>'+
+       '<circle cx="50" cy="52" r="15" fill="#2F8FE0"/><circle cx="50" cy="52" r="7" fill="#231F2E"/>'+
+       '<circle cx="55" cy="46" r="4" fill="#fff"/>'+
+       '<path d="M22 52q-6-14 8-20M78 52q6-14-8-20" stroke="#3D3A4E" stroke-width="3" fill="none" stroke-linecap="round"/>',
+  mouth: BG+'<ellipse cx="50" cy="52" rx="32" ry="24" fill="#FF6E7A"/>'+
+         '<path d="M20 52h60" stroke="#fff" stroke-width="4"/>'+
+         '<path d="M20 52c0-9 13-15 30-15s30 6 30 15c0 10-13 20-30 20S20 62 20 52z" fill="#FF8A94"/>',
+  arm: BG+'<path d="M30 78c0-12 10-18 20-22s16-14 16-26" stroke="#FFC0B4" stroke-width="18" fill="none" stroke-linecap="round"/>'+
+       '<circle cx="66" cy="28" r="14" fill="#FFC0B4"/>',
+  share: BG+'<circle cx="34" cy="58" r="16" fill="#4CBF58"/><circle cx="66" cy="58" r="16" fill="#FFC53D"/>'+
+         '<path d="M46 50L20 34" stroke="#8B8397" stroke-width="4" stroke-linecap="round"/>'+
+         '<path d="M54 50l26-16" stroke="#8B8397" stroke-width="4" stroke-linecap="round"/>'+
+         '<path d="M46 66L24 80M54 66l22 14" stroke="#8B8397" stroke-width="4" stroke-linecap="round"/>',
+  smile: BG+'<circle cx="50" cy="50" r="32" fill="#FFD21F"/>'+EYES(40,60,42,3.6)+
+         '<path d="M38 58q12 14 24 0" stroke="#3D3A4E" stroke-width="3.6" fill="none" stroke-linecap="round"/>',
+  listen: BG+'<circle cx="40" cy="52" r="28" fill="#FFC0B4"/>'+
+          '<path d="M26 52a14 14 0 0128 0c0 6-4 8-4 14" stroke="#F79A8E" stroke-width="5" fill="none" stroke-linecap="round"/>'+
+          '<path d="M62 26a26 26 0 010 52M76 16a38 38 0 010 72" stroke="#4FBEE8" stroke-width="4.5" fill="none" stroke-linecap="round"/>',
+  help: BG+'<circle cx="34" cy="42" r="16" fill="#FF7AA2"/><circle cx="66" cy="42" r="16" fill="#4FBEE8"/>'+
+        '<path d="M20 84c0-12 6-20 14-20M80 84c0-12-6-20-14-20" stroke="#FFC53D" stroke-width="6" fill="none" stroke-linecap="round"/>'+
+        '<path d="M46 60h8v-6h8v6h8" stroke="#FF7AA2" stroke-width="5" fill="none" stroke-linecap="round"/>',
+  say: BG+'<path d="M24 44c14-12 38-12 52 0v18c0 12-16 20-26 20-4 0-8-1-12-3l-10 7 2-9c-4-3-6-8-6-14z" fill="#fff" stroke="#8B8397" stroke-width="3"/>'+
+       '<circle cx="38" cy="53" r="3.6" fill="#8B8397"/><circle cx="50" cy="53" r="3.6" fill="#8B8397"/><circle cx="62" cy="53" r="3.6" fill="#8B8397"/>',
+  friend: BG+'<circle cx="34" cy="44" r="15" fill="#FF9EBB"/><path d="M12 82c0-14 10-22 22-22s22 8 22 22z" fill="#FF9EBB"/>'+
+          '<circle cx="66" cy="44" r="15" fill="#6BD8F5"/><path d="M44 82c0-14 10-22 22-22s22 8 22 22z" fill="#6BD8F5"/>',
+  wave: BG+'<rect x="26" y="52" width="26" height="30" rx="12" fill="#4FBEE8"/>'+
+        '<rect x="52" y="52" width="26" height="30" rx="12" fill="#FF7AA2"/>'+
+        '<circle cx="50" cy="24" r="13" fill="#FFD21F"/>'+
+        '<path d="M70 40c8-4 12 4 8 10" stroke="#FFC0B4" stroke-width="7" fill="none" stroke-linecap="round"/>',
+  toy: BG+'<circle cx="50" cy="52" r="30" fill="#FF7AA2"/><path d="M20 52h60" stroke="#fff" stroke-width="4"/>'+
+       '<path d="M50 22a30 30 0 010 60 30 30 0 010-60z" fill="none" stroke="#fff" stroke-width="3"/>'+
+       '<circle cx="50" cy="52" r="9" fill="#FFD21F"/>',
+
+  // —— 家人 ——
+  mum: BG+'<circle cx="50" cy="40" r="20" fill="#FFC0B4"/><path d="M30 38c0-16 8-22 20-22s20 6 20 22c0 4-2 6-4 6-2-10-8-14-16-14s-14 4-16 14c-2 0-4-2-4-6z" fill="#C9704F"/>'+
+       '<path d="M18 88c0-18 14-28 32-28s32 10 32 28z" fill="#FF7AA2"/>'+EYES(42,58,40,3.2)+SMILE_M,
+  dad: BG+'<circle cx="50" cy="40" r="20" fill="#FFC0B4"/><path d="M28 34c2-14 10-18 22-18s20 4 22 18l-6 2c-2-8-8-10-16-10s-14 2-16 10z" fill="#5B4636"/>'+
+       '<path d="M18 88c0-18 14-28 32-28s32 10 32 28z" fill="#4FBEE8"/>'+EYES(42,58,40,3.2)+
+       '<path d="M40 52h20" stroke="#5B4636" stroke-width="4" stroke-linecap="round"/>',
+  grandma: BG+'<circle cx="50" cy="42" r="19" fill="#FFC0B4"/><path d="M30 40c0-16 8-22 20-22s20 6 20 22c0 3-1 4-2 4-2-10-8-13-18-13s-16 3-18 13c-1 0-2-1-2-4z" fill="#EFEFEF"/>'+
+           '<path d="M18 88c0-17 14-27 32-27s32 10 32 27z" fill="#A98BE8"/>'+EYES(43,57,42,3)+SMILE_M,
+  grandpa: BG+'<circle cx="50" cy="42" r="19" fill="#FFC0B4"/><path d="M28 36c2-13 10-16 22-16s20 3 22 16l-5 2c-2-8-8-10-17-10s-15 2-17 10z" fill="#D9D9DE"/>'+
+           '<path d="M18 88c0-17 14-27 32-27s32 10 32 27z" fill="#6BD36B"/>'+EYES(43,57,42,3)+
+           '<path d="M40 58q10 8 20 0" stroke="#D9D9DE" stroke-width="5" fill="none" stroke-linecap="round"/>',
+  me: BG+'<circle cx="50" cy="44" r="21" fill="#FFC0B4"/><path d="M28 40c0-16 10-24 22-24s22 8 22 24c0 4-1 5-2 5-3-11-10-15-20-15s-17 4-20 15c-1 0-2-1-2-5z" fill="#4A3728"/>'+
+      '<path d="M20 88c0-17 13-27 30-27s30 10 30 27z" fill="#FFC53D"/>'+EYES(42,58,44,3.4)+
+      '<path d="M44 56q6 6 12 0" stroke="#3D3A4E" stroke-width="3" fill="none" stroke-linecap="round"/>',
+  sister: BG+'<circle cx="50" cy="42" r="19" fill="#FFC0B4"/><path d="M30 40c0-16 9-22 20-22s20 6 20 22c0 3-1 4-2 4-2-10-8-13-18-13s-16 3-18 13c-1 0-2-1-2-4z" fill="#8B5A2B"/>'+
+          '<path d="M18 88c0-17 14-27 32-27s32 10 32 27z" fill="#FF7AA2"/>'+EYES(43,57,42,3)+SMILE_M+
+          '<circle cx="24" cy="72" r="5" fill="#FFD21F"/>',
+  brother: BG+'<circle cx="50" cy="42" r="19" fill="#FFC0B4"/><path d="M30 36c2-13 9-18 20-18s18 5 20 18l-5 2c-2-9-7-11-15-11s-13 2-15 11z" fill="#3D2B1F"/>'+
+           '<path d="M18 88c0-17 14-27 32-27s32 10 32 27z" fill="#2F8FE0"/>'+EYES(43,57,42,3)+SMILE_M,
+  baby: BG+'<circle cx="50" cy="46" r="24" fill="#FFC0B4"/><path d="M30 42c0-14 9-20 20-20s20 6 20 20c0 2 0 3-1 3-2-9-9-12-19-12s-17 3-19 12c-1 0-1-1-1-3z" fill="#FFD9A0"/>'+
+        '<path d="M24 88c0-14 12-22 26-22s26 8 26 22z" fill="#A8E6F0"/>'+EYES(42,58,46,3.4)+
+        '<circle cx="50" cy="58" r="6" fill="#FF8A94"/>',
+  cousin: BG+'<circle cx="38" cy="46" r="17" fill="#FFD9A0"/><circle cx="66" cy="46" r="17" fill="#FFC0B4"/>'+
+          '<path d="M16 86c0-13 10-21 22-21s22 8 22 21z" fill="#FFC53D"/>'+
+          '<path d="M46 86c0-13 10-21 22-21s22 8 22 21z" fill="#FF7AA2"/>'+EYES(33,45,44,3)+EYES(60,72,44,3),
+  uncle: BG+'<circle cx="50" cy="42" r="19" fill="#FFC0B4"/><path d="M28 34c2-13 10-16 22-16s20 3 22 16l-5 2c-2-8-8-10-17-10s-15 2-17 10z" fill="#3D2B1F"/>'+
+         '<path d="M18 88c0-17 14-27 32-27s32 10 32 27z" fill="#FF9C6E"/>'+EYES(43,57,42,3)+
+         '<path d="M36 62q14 10 28 0" stroke="#3D2B1F" stroke-width="4.5" fill="none" stroke-linecap="round"/>',
+  aunt: BG+'<circle cx="50" cy="42" r="19" fill="#FFC0B4"/><path d="M30 40c0-16 9-22 20-22s20 6 20 22c0 3-1 4-2 4-2-10-8-13-18-13s-16 3-18 13c-1 0-2-1-2-4z" fill="#C9704F"/>'+
+        '<path d="M18 88c0-17 14-27 32-27s32 10 32 27z" fill="#FF85B3"/>'+EYES(43,57,42,3)+SMILE_M,
+  family: BG+'<path d="M50 20L20 46v42h60V46z" fill="#FFEFD5"/><path d="M14 46l36-26 36 26" stroke="#FF7AA2" stroke-width="5" fill="none" stroke-linejoin="round"/>'+
+          '<rect x="40" y="60" width="20" height="28" fill="#C9704F"/><rect x="22" y="52" width="14" height="14" fill="#4FBEE8"/><rect x="64" y="52" width="14" height="14" fill="#4FBEE8"/>'+
+          '<circle cx="38" cy="78" r="7" fill="#FFC0B4"/><circle cx="62" cy="78" r="7" fill="#FFC0B4"/>',
+
+  // —— 动物 ——
+  dog: BG+'<ellipse cx="22" cy="46" rx="10" ry="18" fill="#C98A40"/><ellipse cx="78" cy="46" rx="10" ry="18" fill="#C98A40"/>'+
+       '<ellipse cx="50" cy="54" rx="30" ry="28" fill="#E8A75A"/><ellipse cx="50" cy="68" rx="16" ry="12" fill="#FBE3C4"/>'+
+       '<ellipse cx="50" cy="62" rx="5" ry="4" fill="#4A3A2A"/>'+EYES(39,61,46,4)+
+       '<path d="M50 66v4M50 70q-7 7-11 0M50 70q7 7 11 0" stroke="#4A3A2A" stroke-width="3" fill="none" stroke-linecap="round"/>',
+  cat: BG+'<path d="M26 34l4 18 16-8z" fill="#F2A0A0"/><path d="M74 34l-4 18-16-8z" fill="#F2A0A0"/>'+
+       '<ellipse cx="50" cy="56" rx="29" ry="26" fill="#F2B49B"/>'+EYES(39,61,52,4.6,'#2E7D5B')+
+       '<path d="M50 62l-4 4h8z" fill="#E0725C"/><path d="M50 66v3M50 69q-6 5-9 0M50 69q6 5 9 0" stroke="#C0604C" stroke-width="2.6" fill="none" stroke-linecap="round"/>'+
+       '<path d="M22 58h10M22 66h10M78 58H68M78 66H68" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/>',
+  fish: BG+'<path d="M28 50c12-16 34-16 46 0-12 16-34 16-46 0z" fill="#4FBFDF"/>'+
+        '<path d="M28 50l-14-12v24z" fill="#2C9CC8"/><circle cx="56" cy="45" r="4.6" fill="#fff"/><circle cx="57" cy="45" r="2.4" fill="#231F2E"/>'+
+        '<path d="M40 40c6-8 14-8 20 0" stroke="#fff" stroke-width="3" fill="none"/>'+
+        '<circle cx="24" cy="66" r="3" fill="#A8E6F0"/><circle cx="18" cy="74" r="2" fill="#A8E6F0"/><circle cx="32" cy="72" r="2.2" fill="#A8E6F0"/>',
+  bird: BG+'<ellipse cx="50" cy="56" rx="24" ry="22" fill="#6BD8F5"/><ellipse cx="50" cy="72" rx="14" ry="11" fill="#FFF3C4"/>'+
+        '<circle cx="42" cy="46" r="7" fill="#fff"/><circle cx="43" cy="46" r="3.4" fill="#231F2E"/>'+
+        '<circle cx="60" cy="46" r="7" fill="#fff"/><circle cx="61" cy="46" r="3.4" fill="#231F2E"/>'+
+        '<path d="M50 52l7 5-7 4z" fill="#FF9C1F"/>'+
+        '<path d="M28 58c-8 8-4 16 4 14s8-10 2-16z" fill="#4FBEE8"/>'+
+        '<path d="M26 62l-12 8 12 6z" fill="#FFC53D"/>',
+  rabbit: BG+'<ellipse cx="38" cy="26" rx="8" ry="20" fill="#FFC0B4"/><ellipse cx="62" cy="26" rx="8" ry="20" fill="#FFC0B4"/>'+
+          '<ellipse cx="38" cy="26" rx="4" ry="14" fill="#FFB3CE"/><ellipse cx="62" cy="26" rx="4" ry="14" fill="#FFB3CE"/>'+
+          '<ellipse cx="50" cy="62" rx="26" ry="24" fill="#fff"/>'+EYES(41,59,58,4,'#E4678A')+
+          '<path d="M50 66v4h7" stroke="#E79AA8" stroke-width="2.6" fill="none" stroke-linecap="round"/>'+
+          '<circle cx="50" cy="70" r="3.6" fill="#E4678A"/>',
+  fox: BG+'<path d="M26 30l6 20 16-8z" fill="#E4693A"/><path d="M74 30l-6 20-16-8z" fill="#E4693A"/>'+
+       '<path d="M50 26c18 0 26 14 26 26s-12 24-26 24-26-12-26-24 8-26 26-26z" fill="#F58A4B"/>'+
+       '<path d="M50 72c-10 0-18-6-18-6s6 18 18 18 18-18 18-18-8 6-18 6z" fill="#fff"/>'+
+       EYES(40,60,48,4.4)+'<ellipse cx="50" cy="62" rx="5" ry="4" fill="#3D2B1F"/>',
+  panda: BG+'<circle cx="28" cy="30" r="12" fill="#2B2B33"/><circle cx="72" cy="30" r="12" fill="#2B2B33"/>'+
+         '<ellipse cx="50" cy="54" rx="32" ry="30" fill="#fff"/>'+
+         '<ellipse cx="38" cy="48" rx="11" ry="13" fill="#2B2B33"/><ellipse cx="62" cy="48" rx="11" ry="13" fill="#2B2B33"/>'+
+         '<circle cx="38" cy="48" r="4.4" fill="#fff"/><circle cx="62" cy="48" r="4.4" fill="#fff"/>'+
+         '<ellipse cx="50" cy="64" rx="6" ry="4.6" fill="#2B2B33"/><path d="M50 68v3" stroke="#2B2B33" stroke-width="2.4"/>'+
+         '<path d="M44 72q6 5 12 0" stroke="#2B2B33" stroke-width="2.6" fill="none" stroke-linecap="round"/>',
+  monkey: BG+'<circle cx="24" cy="44" r="9" fill="#D9A05B"/><circle cx="76" cy="44" r="9" fill="#D9A05B"/>'+
+          '<ellipse cx="50" cy="52" rx="30" ry="28" fill="#C98A40"/><ellipse cx="50" cy="66" rx="20" ry="16" fill="#F3D6A8"/>'+
+          '<ellipse cx="50" cy="60" rx="4" ry="3" fill="#7B5B33"/><ellipse cx="50" cy="64" rx="4" ry="3" fill="#7B5B33"/>'+
+          EYES(40,60,46,4)+'<path d="M42 74q8 6 16 0" stroke="#7B5B33" stroke-width="2.8" fill="none" stroke-linecap="round"/>',
+  tiger: BG+'<circle cx="24" cy="32" r="10" fill="#E8952F"/><circle cx="76" cy="32" r="10" fill="#E8952F"/>'+
+         '<ellipse cx="50" cy="54" rx="30" ry="28" fill="#F5A23C"/><ellipse cx="50" cy="66" rx="17" ry="13" fill="#FFF3D6"/>'+
+         '<path d="M28 40l4 8M72 40l-4 8M34 32l3 6M66 32l-3 6" stroke="#3D2B1F" stroke-width="3" stroke-linecap="round"/>'+
+         '<ellipse cx="50" cy="60" rx="5" ry="4" fill="#3D2B1F"/>'+EYES(39,61,46,4.2)+
+         '<path d="M50 64v4M50 68q-6 5-9 0M50 68q6 5 9 0" stroke="#3D2B1F" stroke-width="2.6" fill="none" stroke-linecap="round"/>',
+  elephant: BG+'<ellipse cx="22" cy="52" rx="16" ry="20" fill="#A8B6C8"/><ellipse cx="78" cy="52" rx="16" ry="20" fill="#A8B6C8"/>'+
+            '<ellipse cx="50" cy="52" rx="29" ry="27" fill="#C3CFDD"/>'+
+            '<path d="M42 72c0 14 4 20 8 20s8-6 8-20" fill="#C3CFDD"/>'+
+            EYES(40,60,46,4)+'<ellipse cx="50" cy="66" rx="6" ry="4.4" fill="#94A3B5"/>',
+  lion: BG+'<circle cx="50" cy="52" r="34" fill="#E8952F"/><circle cx="50" cy="52" r="26" fill="#F6C879"/>'+
+        '<ellipse cx="50" cy="60" rx="18" ry="14" fill="#FFF0D0"/>'+EYES(42,58,50,4.2)+
+        '<path d="M50 56l-4 4h8z" fill="#C4632B"/><path d="M50 60v3" stroke="#C4632B" stroke-width="2.4"/>'+
+        '<path d="M44 66q6 5 12 0" stroke="#C4632B" stroke-width="2.6" fill="none" stroke-linecap="round"/>',
+  giraffe: BG+'<ellipse cx="32" cy="18" rx="7" ry="7" fill="#C98A40"/><ellipse cx="68" cy="18" rx="7" ry="7" fill="#C98A40"/>'+
+           '<rect x="42" y="18" width="16" height="34" rx="7" fill="#E8B856"/>'+
+           '<ellipse cx="50" cy="62" rx="24" ry="22" fill="#F5C95F"/><ellipse cx="50" cy="74" rx="14" ry="10" fill="#FFF0D0"/>'+
+           '<path d="M30 50h8M34 58h8M62 50h8M66 58h8" stroke="#C98A40" stroke-width="4" stroke-linecap="round"/>'+
+           EYES(42,58,56,4)+'<ellipse cx="50" cy="70" rx="6" ry="4" fill="#B9852F"/>',
+  zoo: BG+'<rect x="16" y="52" width="68" height="34" rx="8" fill="#FFF3D6"/>'+
+       '<path d="M16 52V30h68v22" stroke="#8B5A2B" stroke-width="5" fill="none"/>'+
+       '<path d="M20 30h60" stroke="#8B5A2B" stroke-width="5" stroke-linecap="round"/>'+
+       '<path d="M28 52v34M40 52v34M52 52v34M64 52v34M76 52v34" stroke="#C4632B" stroke-width="4"/>'+
+       '<circle cx="50" cy="20" r="9" fill="#FFC53D"/>',
+  heart: BG+'<path d="M50 78S18 60 18 40a16 16 0 0132-6 16 16 0 0132 6c0 20-32 38-32 38z" fill="#FF5E7E"/>',
+  gift: BG+'<rect x="22" y="44" width="56" height="40" rx="6" fill="#FF7AA2"/><rect x="18" y="34" width="64" height="14" rx="5" fill="#FF9CBB"/>'+
+        '<rect x="44" y="34" width="12" height="50" fill="#FFD21F"/>'+
+        '<path d="M50 34c-8-10-18-4-8 6M50 34c8-10 18-4 8 6" fill="#6BD36B"/>',
+
+  // —— 植物 / 自然 ——
+  apple: BG+'<path d="M50 26c14-8 26 0 26 14 0 20-14 38-26 38S24 60 24 40c0-14 12-22 26-14z" fill="#FF4D4D"/>'+
+         '<path d="M50 26V14" stroke="#8B5A2B" stroke-width="5" stroke-linecap="round"/>'+
+         '<path d="M52 20c8-8 16-6 14 0-2 5-10 6-14 0z" fill="#4CBF58"/>'+
+         '<ellipse cx="38" cy="42" rx="7" ry="10" fill="#FF8A94" opacity=".55"/>',
+  banana: BG+'<path d="M26 34c0 30 20 44 40 40 12-2 12-12 2-14-14-3-24-12-26-26-1-8-16-8-16 0z" fill="#FFD21F"/>'+
+          '<path d="M26 34c0 30 20 44 40 40" stroke="#E8B400" stroke-width="4" fill="none"/>'+
+          '<path d="M64 74c6-2 8-8 6-10" stroke="#8B5A2B" stroke-width="4" fill="none" stroke-linecap="round"/>',
+  orange: BG+'<circle cx="50" cy="54" r="30" fill="#FF8A1F"/>'+
+          '<circle cx="50" cy="54" r="24" fill="none" stroke="#FFB35C" stroke-width="3"/>'+
+          '<path d="M50 24V14" stroke="#4CBF58" stroke-width="5" stroke-linecap="round"/>'+
+          '<path d="M52 20c9-9 18-6 16 0-2 5-11 6-16 0z" fill="#4CBF58"/>'+
+          '<path d="M50 34v40M30 54h40M36 40l28 28M64 40L36 68" stroke="#FFB35C" stroke-width="2.4"/>',
+  grape: BG+'<path d="M50 24V14" stroke="#8B5A2B" stroke-width="5" stroke-linecap="round"/>'+
+         '<path d="M50 22c8-8 16-5 14 0" stroke="#4CBF58" stroke-width="5" fill="none" stroke-linecap="round"/>'+
+         '<circle cx="38" cy="42" r="9" fill="#9B5FC0"/><circle cx="62" cy="42" r="9" fill="#9B5FC0"/>'+
+         '<circle cx="50" cy="42" r="9" fill="#A96FD0"/>'+
+         '<circle cx="32" cy="58" r="9" fill="#8B4FB2"/><circle cx="50" cy="58" r="9" fill="#9B5FC0"/><circle cx="68" cy="58" r="9" fill="#8B4FB2"/>'+
+         '<circle cx="41" cy="72" r="9" fill="#7E45A6"/><circle cx="59" cy="72" r="9" fill="#8B4FB2"/>'+
+         '<circle cx="50" cy="84" r="8" fill="#6E3A96"/>',
+  tree: BG+'<rect x="44" y="54" width="12" height="34" rx="4" fill="#8B5A2B"/>'+
+        '<circle cx="50" cy="40" r="26" fill="#4CBF58"/><circle cx="30" cy="50" r="17" fill="#5ED36B"/><circle cx="70" cy="50" r="17" fill="#5ED36B"/>'+
+        '<circle cx="38" cy="32" r="6" fill="#7FE07F"/>',
+  flower: BG+'<path d="M50 50v38" stroke="#3FAE45" stroke-width="5" stroke-linecap="round"/>'+
+          '<path d="M50 70c-10 0-14-8-12-14 6-2 12 4 12 14z" fill="#6BD36B"/>'+
+          '<circle cx="50" cy="36" r="10" fill="#FF7AA2"/><circle cx="36" cy="44" r="10" fill="#FF9CBB"/><circle cx="64" cy="44" r="10" fill="#FF9CBB"/>'+
+          '<circle cx="40" cy="24" r="10" fill="#FFD21F"/><circle cx="62" cy="24" r="10" fill="#FFD21F"/>'+
+          '<circle cx="50" cy="40" r="8" fill="#FFC53D"/>',
+  grass: BG+'<rect x="10" y="70" width="80" height="18" rx="6" fill="#8B5A2B"/>'+
+         '<path d="M20 70c0-14 4-22 8-22s8 8 8 22M40 70c0-18 3-28 7-28s7 10 7 28M62 70c0-16 4-24 8-24s8 8 8 24" stroke="#4CBF58" stroke-width="6" fill="none" stroke-linecap="round"/>'+
+         '<path d="M52 70c0-14 3-20 6-20s6 6 6 20" stroke="#6BD36B" stroke-width="6" fill="none" stroke-linecap="round"/>',
+  plant: BG+'<path d="M30 84h40l-4-12H34z" fill="#C9704F"/>'+
+         '<path d="M50 72V40" stroke="#3FAE45" stroke-width="5" stroke-linecap="round"/>'+
+         '<path d="M50 52c-12 0-16-10-14-16 7-1 14 6 14 16z" fill="#6BD36B"/>'+
+         '<path d="M50 44c12 0 16-10 14-16-7-1-14 6-14 16z" fill="#4CBF58"/>',
+  sun: BG+'<circle cx="50" cy="50" r="22" fill="#FFD21F"/><circle cx="50" cy="50" r="15" fill="#FFC53D"/>'+
+       '<path d="M50 14v10M50 76v10M14 50h10M76 50h10M24 24l7 7M69 69l7 7M76 24l-7 7M31 69l-7 7" stroke="#FFC53D" stroke-width="5" stroke-linecap="round"/>'+
+       EYES(44,56,48,3,'#3D3A4E')+'<path d="M44 58q6 5 12 0" stroke="#3D3A4E" stroke-width="2.6" fill="none" stroke-linecap="round"/>',
+  water: BG+'<path d="M50 18c14 18 22 28 22 38a22 22 0 11-44 0c0-10 8-20 22-38z" fill="#6BD8F5"/>'+
+         '<path d="M50 18c14 18 22 28 22 38a22 22 0 11-44 0c0-10 8-20 22-38z" fill="none" stroke="#A8E6F0" stroke-width="3"/>'+
+         '<ellipse cx="40" cy="58" rx="7" ry="10" fill="#fff" opacity=".6"/>',
+  garden: BG+'<rect x="14" y="62" width="72" height="26" rx="6" fill="#C9A87C"/>'+
+          '<circle cx="30" cy="46" r="14" fill="#FF7AA2"/><circle cx="70" cy="44" r="12" fill="#FFD21F"/>'+
+          '<rect x="46" y="44" width="10" height="30" fill="#3FAE45"/><circle cx="51" cy="40" r="9" fill="#A98BE8"/>'+
+          '<path d="M14 62h72" stroke="#8B5A2B" stroke-width="4"/>',
+  farm: BG+'<path d="M14 88V56l26-18 26 18v32z" fill="#FFF3D6"/>'+
+        '<path d="M8 58L40 36l32 22" stroke="#C4632B" stroke-width="6" fill="none" stroke-linejoin="round"/>'+
+        '<rect x="38" y="66" width="16" height="22" fill="#8B5A2B"/>'+
+        '<rect x="58" y="62" width="14" height="14" fill="#6BD8F5"/>'+
+        '<path d="M14 88h72" stroke="#3FAE45" stroke-width="6" stroke-linecap="round"/>',
+  school: BG+'<rect x="18" y="44" width="64" height="40" rx="4" fill="#FFF3D6"/>'+
+          '<path d="M12 44L50 22l38 22z" fill="#FF7AA2"/>'+
+          '<rect x="42" y="62" width="16" height="22" fill="#8B5A2B"/>'+
+          '<rect x="26" y="52" width="12" height="12" fill="#6BD8F5"/><rect x="62" y="52" width="12" height="12" fill="#6BD8F5"/>'+
+          '<rect x="46" y="30" width="8" height="18" fill="#C4632B"/>',
+  air: BG+'<path d="M20 36h44a10 10 0 010 20H28" stroke="#A8E6F0" stroke-width="7" fill="none" stroke-linecap="round"/>'+
+       '<path d="M16 56h48a10 10 0 010 20H24" stroke="#6BD8F5" stroke-width="7" fill="none" stroke-linecap="round"/>'+
+       '<path d="M20 74h40" stroke="#A8E6F0" stroke-width="7" fill="none" stroke-linecap="round"/>',
+
+  // —— Unit 5 / 6 ——
+  bear: BG+'<circle cx="26" cy="28" r="12" fill="#8B5A2B"/><circle cx="74" cy="28" r="12" fill="#8B5A2B"/>'+
+        '<ellipse cx="50" cy="54" rx="30" ry="28" fill="#A9713C"/><ellipse cx="50" cy="66" rx="16" ry="12" fill="#E8C79A"/>'+
+        '<ellipse cx="50" cy="60" rx="5" ry="4" fill="#3D2B1F"/>'+EYES(40,60,46,4)+
+        '<path d="M50 64v3M44 70q6 5 12 0" stroke="#3D2B1F" stroke-width="2.8" fill="none" stroke-linecap="round"/>',
+  duck: BG+'<ellipse cx="42" cy="58" rx="30" ry="22" fill="#FFD21F"/>'+
+        '<circle cx="66" cy="36" r="18" fill="#FFD21F"/>'+
+        '<circle cx="60" cy="30" r="6" fill="#fff"/><circle cx="61" cy="30" r="3" fill="#231F2E"/>'+
+        '<path d="M80 34h12l-3 6 3 6H78z" fill="#FF9C1F"/>'+
+        '<path d="M20 64c-8-2-8-14 0-12h22v12z" fill="#FFC53D"/>'+
+        '<path d="M40 78h10l-1 8H41zM56 78h10l-1 8H57z" fill="#FF9C1F"/>',
+  sea: BG+'<rect x="10" y="46" width="80" height="42" rx="8" fill="#4FBFDF"/>'+
+       '<path d="M10 52q10-8 20 0t20 0 20 0 20 0v-8H10z" fill="#A8E6F0"/>'+
+       '<circle cx="72" cy="24" r="10" fill="#FFD21F"/>'+
+       '<path d="M22 66q8-8 16 0M52 72q8-8 16 0" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round"/>',
+  draw: BG+'<rect x="16" y="64" width="68" height="24" rx="6" fill="#FFF3D6"/>'+
+        '<path d="M30 72l14-30 12 18 8-10 10 22z" fill="#FF7AA2"/>'+
+        '<circle cx="68" cy="28" r="8" fill="#FFD21F"/>',
+  palette: BG+'<path d="M50 22a28 28 0 000 56h8a12 12 0 010-24h6a14 14 0 000-28 8 8 0 01-14-4z" fill="#FFEFD5" stroke="#8B8397" stroke-width="3"/>'+
+           '<circle cx="38" cy="40" r="6" fill="#FF4D4D"/><circle cx="56" cy="36" r="6" fill="#FFD21F"/><circle cx="30" cy="58" r="6" fill="#4CBF58"/>'+
+           '<circle cx="48" cy="58" r="6" fill="#2F8FE0"/><circle cx="66" cy="52" r="6" fill="#9B5FC0"/>',
+  clock: BG+'<circle cx="50" cy="52" r="30" fill="#fff" stroke="#3D3A4E" stroke-width="4"/>'+
+         '<path d="M50 52V34M50 52h14" stroke="#FF7AA2" stroke-width="5" stroke-linecap="round"/>'+
+         '<circle cx="50" cy="52" r="3.4" fill="#3D3A4E"/>'+
+         '<path d="M50 18v6M50 80v6M16 52h6M78 52h6" stroke="#3D3A4E" stroke-width="4" stroke-linecap="round"/>',
+  cut: BG+'<path d="M18 76l52-52" stroke="#8B8397" stroke-width="6" stroke-linecap="round"/>'+
+       '<path d="M18 24l52 52" stroke="#8B8397" stroke-width="6" stroke-linecap="round"/>'+
+       '<circle cx="70" cy="76" r="10" fill="none" stroke="#FF7AA2" stroke-width="6"/>'+
+       '<circle cx="70" cy="24" r="10" fill="none" stroke="#4FBEE8" stroke-width="6"/>',
+  piece: BG+'<path d="M28 34h30a8 8 0 018 8v22a8 8 0 01-8 8H28z" fill="#FFD9A0" stroke="#C9704F" stroke-width="3"/>'+
+         '<path d="M28 52h30M28 64h30" stroke="#C9704F" stroke-width="3"/>'+
+         '<path d="M72 30v34" stroke="#8B8397" stroke-width="5" stroke-linecap="round" stroke-dasharray="8 6"/>',
+
+  // —— 人物（三下 U1/U2） ——
+  teacher: BG+'<path d="M30 84c0-14 9-21 20-21s20 7 20 21z" fill="#4FBEE8"/>'+
+           '<circle cx="50" cy="40" r="16" fill="#FFD9B8"/>'+
+           '<path d="M34 38a16 16 0 0132 0c0-12-7-19-16-19s-16 7-16 19z" fill="#6B4A3A"/>'+
+           EYES(44,56,40,2.4)+
+           '<path d="M45 47q5 4 10 0" stroke="#3D3A4E" stroke-width="2.4" fill="none" stroke-linecap="round"/>'+
+           '<rect x="32" y="66" width="36" height="14" rx="3" fill="#fff" stroke="#8B8397" stroke-width="2"/>'+
+           '<path d="M50 66v14" stroke="#8B8397" stroke-width="2"/>',
+  girl: BG+'<circle cx="28" cy="48" r="8" fill="#8B5A2B"/><circle cx="72" cy="48" r="8" fill="#8B5A2B"/>'+
+        '<circle cx="50" cy="40" r="17" fill="#FFD9B8"/>'+
+        '<path d="M33 38c0-14 8-21 17-21s17 7 17 21c0-9-8-13-17-13s-17 4-17 13z" fill="#8B5A2B"/>'+
+        EYES(44,56,40,2.4)+
+        '<path d="M45 47q5 4 10 0" stroke="#3D3A4E" stroke-width="2.4" fill="none" stroke-linecap="round"/>'+
+        '<circle cx="38" cy="46" r="3.6" fill="#FF9AA8"/><circle cx="62" cy="46" r="3.6" fill="#FF9AA8"/>'+
+        '<path d="M32 86c0-12 8-19 18-19s18 7 18 19z" fill="#FF7AA2"/>',
+  boy: BG+'<circle cx="50" cy="40" r="17" fill="#FFD9B8"/>'+
+       '<path d="M33 38c1-13 8-20 17-20s16 7 17 20c-4-8-9-11-17-11s-13 3-17 11z" fill="#4A3B32"/>'+
+       EYES(44,56,40,2.4)+
+       '<path d="M45 47q5 4 10 0" stroke="#3D3A4E" stroke-width="2.4" fill="none" stroke-linecap="round"/>'+
+       '<path d="M32 86c0-12 8-19 18-19s18 7 18 19z" fill="#5B8DEF"/>',
+  woman: BG+'<path d="M32 86c0-13 8-19 18-19s18 6 18 19z" fill="#E86A9B"/>'+
+         '<path d="M34 42c-4 22-2 34 2 40h28c4-6 6-18 2-40z" fill="#5B3A2E"/>'+
+         '<circle cx="50" cy="38" r="16" fill="#FFD9B8"/>'+
+         '<path d="M34 38c0-13 7-19 16-19s16 6 16 19c-3-8-8-11-16-11s-13 3-16 11z" fill="#5B3A2E"/>'+
+         EYES(44,56,38,2.4)+
+         '<path d="M45 45q5 4 10 0" stroke="#3D3A4E" stroke-width="2.4" fill="none" stroke-linecap="round"/>',
+  man: BG+'<path d="M31 86c0-13 9-19 19-19s19 6 19 19z" fill="#2F4858"/>'+
+       '<path d="M50 67l-5 8 5 6 5-6z" fill="#FF6B6B"/>'+
+       '<circle cx="50" cy="38" r="16" fill="#FFD9B8"/>'+
+       '<path d="M34 37c0-12 7-18 16-18s16 6 16 18c-4-7-9-9-16-9s-12 2-16 9z" fill="#3A2E28"/>'+
+       EYES(44,56,38,2.4)+
+       '<path d="M44 47h12" stroke="#3D3A4E" stroke-width="2.4" stroke-linecap="round"/>',
+  body: BG+'<circle cx="50" cy="26" r="11" fill="#FFD9B8"/>'+
+        '<path d="M50 37v28" stroke="#3D3A4E" stroke-width="6" stroke-linecap="round"/>'+
+        '<path d="M32 50h36" stroke="#3D3A4E" stroke-width="6" stroke-linecap="round"/>'+
+        '<path d="M50 65l-12 20M50 65l12 20" stroke="#3D3A4E" stroke-width="6" stroke-linecap="round"/>',
+  face: BG+'<circle cx="50" cy="50" r="30" fill="#FFD9B8"/>'+
+        EYES(40,60,45,3)+
+        '<path d="M40 60q10 9 20 0" stroke="#3D3A4E" stroke-width="3" fill="none" stroke-linecap="round"/>'+
+        '<circle cx="31" cy="56" r="4" fill="#FF9AA8"/><circle cx="69" cy="56" r="4" fill="#FF9AA8"/>',
+  nose: BG+'<path d="M50 28v26" stroke="#E8A98F" stroke-width="8" stroke-linecap="round"/>'+
+        '<path d="M42 60q8 9 16 0" stroke="#E8A98F" stroke-width="8" fill="none" stroke-linecap="round"/>'+
+        '<circle cx="43" cy="59" r="3" fill="#D0805F"/><circle cx="57" cy="59" r="3" fill="#D0805F"/>',
+  sing: BG+'<rect x="42" y="24" width="16" height="24" rx="8" fill="#3D3A4E"/>'+
+        '<path d="M42 38c-6 0-8 14 0 18h16c8-4 6-18 0-18" fill="none" stroke="#3D3A4E" stroke-width="4"/>'+
+        '<path d="M50 56v14M42 72h16" stroke="#3D3A4E" stroke-width="4" stroke-linecap="round"/>'+
+        '<circle cx="74" cy="26" r="6" fill="#FF7AA2"/><path d="M80 26v20" stroke="#FF7AA2" stroke-width="4" stroke-linecap="round"/>'+
+        '<path d="M80 30c7 2 7 11 0 13" stroke="#FF7AA2" stroke-width="3" fill="none"/>',
+  dance: BG+'<circle cx="50" cy="26" r="11" fill="#FFD9B8"/>'+
+         '<path d="M50 37l-10 22M50 37l12 20" stroke="#C86BE0" stroke-width="6" stroke-linecap="round"/>'+
+         '<path d="M40 59l-8 18M62 57l6 20" stroke="#C86BE0" stroke-width="6" stroke-linecap="round"/>'+
+         '<path d="M36 44l28 8" stroke="#C86BE0" stroke-width="6" stroke-linecap="round"/>',
+
+  // —— 文具（三下 U3） ——
+  eraser: BG+'<rect x="22" y="42" width="56" height="24" rx="7" fill="#FF8FB1"/>'+
+          '<rect x="22" y="56" width="56" height="10" rx="4" fill="#fff" opacity="0.85"/>'+
+          '<path d="M30 50h40" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity="0.8"/>',
+  ruler: BG+'<rect x="14" y="40" width="72" height="22" rx="4" fill="#FFD21F" stroke="#C9971F" stroke-width="2"/>'+
+         '<path d="M24 40v9M34 40v6M44 40v9M54 40v6M64 40v9M74 40v6" stroke="#8B6B12" stroke-width="2"/>'+
+         '<path d="M20 62h60" stroke="#C9971F" stroke-width="2"/>',
+  pen: BG+'<path d="M28 74l6-14 30-30a6 6 0 018 8L42 68l-14 6z" fill="#2F4858"/>'+
+       '<path d="M64 26l8 8 6-6-8-8z" fill="#C0C6D0"/>'+
+       '<path d="M28 74l6-14 6 8z" fill="#FF6B6B"/>',
+  pencil: BG+'<rect x="26" y="26" width="20" height="48" rx="3" fill="#FFC53D" transform="rotate(45 36 50)"/>'+
+          '<path d="M62 32l8-8 8 8-8 8z" fill="#FFD9B8"/>'+
+          '<path d="M70 40l-14 14" stroke="#FFC53D" stroke-width="14" stroke-linecap="butt"/>'+
+          '<circle cx="56" cy="56" r="7" fill="#3D3A4E"/>',
+  book: BG+'<path d="M20 32c12-6 28-6 30 4v40c-2-10-18-10-30-4z" fill="#7FD1F5"/>'+
+        '<path d="M80 32c-12-6-28-6-30 4v40c2-10 18-10 30-4z" fill="#4FBEE8"/>'+
+        '<path d="M50 36v40" stroke="#2F8FE0" stroke-width="3"/>'+
+        '<path d="M28 46h14M28 56h14M58 46h14M58 56h14" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/>',
+  bag: BG+'<rect x="26" y="38" width="48" height="44" rx="10" fill="#7BD36B"/>'+
+       '<path d="M38 38V30a12 12 0 0124 0v8" fill="none" stroke="#4E9E46" stroke-width="5"/>'+
+       '<rect x="40" y="54" width="20" height="14" rx="4" fill="#fff" opacity="0.9"/>',
+  paper: BG+'<path d="M28 22h34l10 10v46H28z" fill="#fff" stroke="#8B8397" stroke-width="2.6"/>'+
+         '<path d="M62 22v10h10" fill="none" stroke="#8B8397" stroke-width="2.6"/>'+
+         '<path d="M36 44h28M36 54h28M36 64h18" stroke="#B8B0C4" stroke-width="3" stroke-linecap="round"/>',
+  computer: BG+'<rect x="18" y="26" width="64" height="40" rx="5" fill="#3D3A4E"/>'+
+            '<rect x="23" y="31" width="54" height="30" rx="3" fill="#8FD8F7"/>'+
+            '<path d="M42 70h16l4 8H38z" fill="#B8B0C4"/><path d="M32 80h36" stroke="#8B8397" stroke-width="5" stroke-linecap="round"/>',
+  card: BG+'<rect x="22" y="30" width="56" height="42" rx="6" fill="#FFF0F5" stroke="#FF7AA2" stroke-width="3"/>'+
+        '<path d="M30 46h20M30 56h30" stroke="#FFB0C6" stroke-width="3" stroke-linecap="round"/>'+
+        '<path d="M62 60c-4-6-10-4-10 2 0 5 6 8 10 12 4-4 10-7 10-12 0-6-6-8-10-2z" fill="#FF6B8B"/>',
+
+  // —— 食物（三下 U4） ——
+  bread: BG+'<path d="M26 44c0-12 6-18 24-18s24 6 24 18v24H26z" fill="#E8A961"/>'+
+         '<path d="M26 46c6 6 12 8 24 8s18-2 24-8" fill="none" stroke="#F7D6A8" stroke-width="6"/>'+
+         '<path d="M30 68h40v-4H30z" fill="#C98342"/>',
+  egg: BG+'<ellipse cx="50" cy="54" rx="26" ry="30" fill="#fff" stroke="#E8D6CB" stroke-width="3"/>'+
+       '<circle cx="50" cy="56" r="13" fill="#FFD21F"/>'+
+       '<circle cx="45" cy="51" r="4" fill="#FFE37A"/>',
+  milk: BG+'<path d="M34 40h32v42H34z" fill="#fff" stroke="#8FB8D8" stroke-width="3"/>'+
+        '<path d="M34 40l8-12h16l8 12z" fill="#CFE6F5" stroke="#8FB8D8" stroke-width="3"/>'+
+        '<rect x="38" y="52" width="24" height="16" rx="3" fill="#4FBEE8"/>'+
+        '<circle cx="50" cy="60" r="4" fill="#fff"/>',
+  noodle: BG+'<path d="M20 52h60c0 14-13 24-30 24S20 66 20 52z" fill="#FF8FB1"/>'+
+          '<path d="M26 52c4-6 8 4 12 0s8 4 12 0 8 4 12 0 8 4 12 0" fill="none" stroke="#FFE9B0" stroke-width="5" stroke-linecap="round"/>'+
+          '<path d="M66 26l-16 26M74 26l-16 26" stroke="#C98342" stroke-width="4" stroke-linecap="round"/>'+
+          '<path d="M20 52h60" stroke="#E86A9B" stroke-width="4"/>',
+  juice: BG+'<path d="M34 34h32l-4 46H38z" fill="#FFD37A" stroke="#E0A63C" stroke-width="3"/>'+
+         '<path d="M36 44h28l-2 30H38z" fill="#FFA940"/>'+
+         '<path d="M56 20l6 16" stroke="#FF6B8B" stroke-width="5" stroke-linecap="round"/>'+
+         '<circle cx="46" cy="58" r="4" fill="#fff" opacity="0.7"/>',
+  rice: BG+'<path d="M18 48h64c0 16-14 26-32 26S18 64 18 48z" fill="#fff" stroke="#D8CFC4" stroke-width="3"/>'+
+        '<path d="M26 48c8-8 16-10 24-10s16 2 24 10z" fill="#FFF8EE"/>'+
+        '<path d="M44 42h12M40 36h20" stroke="#E8DFD4" stroke-width="4" stroke-linecap="round"/>',
+  meat: BG+'<path d="M28 62c0-16 10-26 22-26s22 10 22 26c0 8-10 12-22 12s-22-4-22-12z" fill="#E8737A"/>'+
+        '<path d="M34 54c6-8 14-10 20-8" fill="none" stroke="#F7A5AA" stroke-width="5" stroke-linecap="round"/>'+
+        '<path d="M50 74l-6 8h12z" fill="#F5E6D3"/><path d="M38 78h24" stroke="#D8CFC4" stroke-width="5" stroke-linecap="round"/>',
+  vegetable: BG+'<path d="M40 74c-8-14-6-30 4-40 6 10 8 26 0 40z" fill="#4CBF58"/>'+
+             '<path d="M56 74c10-12 8-30-2-40-8 12-10 28 2 40z" fill="#6BD36B"/>'+
+             '<circle cx="54" cy="30" r="9" fill="#FF6B6B"/>'+
+             '<path d="M50 22c2-6 8-8 10-8" fill="none" stroke="#4CBF58" stroke-width="4" stroke-linecap="round"/>',
+  plate: BG+'<circle cx="50" cy="52" r="34" fill="#fff" stroke="#D8CFC4" stroke-width="3"/>'+
+         '<circle cx="50" cy="52" r="22" fill="none" stroke="#EFE6F5" stroke-width="3"/>',
+  soup: BG+'<path d="M18 46h64c0 16-14 26-32 26S18 62 18 46z" fill="#FFF0F5" stroke="#D8CFC4" stroke-width="3"/>'+
+        '<path d="M24 46h52c0 4-2 6-4 8H28c-2-2-4-4-4-8z" fill="#FFD37A"/>'+
+        '<path d="M42 30c-4-4 0-8 0-8M50 28c-4-4 0-8 0-8M58 30c-4-4 0-8 0-8" fill="none" stroke="#C9C0D4" stroke-width="3" stroke-linecap="round"/>',
+  fruit: BG+'<path d="M50 30a22 22 0 00-22 22h44a22 22 0 00-22-22z" fill="#6BD36B"/>'+
+         '<path d="M28 52a22 22 0 0044 0z" fill="#FF6B6B"/>'+
+         '<circle cx="42" cy="60" r="2.6" fill="#3D3A4E"/><circle cx="58" cy="60" r="2.6" fill="#3D3A4E"/>'+
+         '<path d="M62 28c6-6 12-4 14 0-4 6-10 6-14 0z" fill="#FFC53D"/>',
+  candy: BG+'<ellipse cx="50" cy="52" rx="16" ry="15" fill="#FF6B8B"/>'+
+         '<path d="M34 52l-12-10 8-6 10 10zM66 52l12-10-8-6-10 10z" fill="#FF8FB1"/>'+
+         '<path d="M44 46c4 4 8 4 12 0" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/>',
+
+  // —— 房间物品与方位（三下 U5） ——
+  home: BG+'<path d="M22 52l28-24 28 24v26H22z" fill="#FFD9B8" stroke="#C98342" stroke-width="3"/>'+
+        '<path d="M14 50l36-30 36 30" fill="none" stroke="#E86A9B" stroke-width="6" stroke-linecap="round"/>'+
+        '<rect x="42" y="58" width="16" height="20" rx="3" fill="#C98342"/>',
+  boat: BG+'<path d="M20 62h60l-10 16H30z" fill="#E8A961" stroke="#C98342" stroke-width="3"/>'+
+        '<path d="M50 62V26l22 36z" fill="#fff" stroke="#8FB8D8" stroke-width="3"/>'+
+        '<path d="M50 30L34 62z" fill="#4FBEE8"/>'+
+        '<path d="M18 78h64" stroke="#4FBEE8" stroke-width="5" stroke-linecap="round"/>',
+  ball: BG+'<circle cx="50" cy="52" r="28" fill="#FFC53D"/>'+
+        '<path d="M28 40c14 6 30 6 44 0M24 62c16 8 36 8 52 0" fill="none" stroke="#E8A72C" stroke-width="4"/>'+
+        '<circle cx="50" cy="52" r="7" fill="#fff" stroke="#E8A72C" stroke-width="3"/>',
+  doll: BG+'<circle cx="50" cy="34" r="15" fill="#FFD9B8"/>'+
+        '<path d="M35 32c0-12 7-18 15-18s15 6 15 18c-4-8-9-10-15-10s-11 2-15 10z" fill="#8B5A2B"/>'+
+        EYES(44,56,34,2.4)+
+        '<path d="M46 40q4 4 8 0" stroke="#3D3A4E" stroke-width="2.2" fill="none" stroke-linecap="round"/>'+
+        '<path d="M38 82c0-14 6-22 12-22s12 8 12 22z" fill="#FF8FB1"/>'+
+        '<circle cx="38" cy="60" r="7" fill="#FF8FB1"/><circle cx="62" cy="60" r="7" fill="#FF8FB1"/>',
+  car: BG+'<path d="M22 62h56l-6-14H38l-8-10H26z" fill="#FF6B6B"/>'+
+       '<path d="M34 48h32l6 14H28z" fill="#8FD8F7"/>'+
+       '<circle cx="36" cy="66" r="8" fill="#3D3A4E"/><circle cx="64" cy="66" r="8" fill="#3D3A4E"/>'+
+       '<path d="M24 74h52" stroke="#3D3A4E" stroke-width="4" stroke-linecap="round"/>',
+  shelf: BG+'<rect x="18" y="34" width="64" height="8" rx="3" fill="#C98342"/>'+
+         '<rect x="18" y="62" width="64" height="8" rx="3" fill="#C98342"/>'+
+         '<rect x="24" y="20" width="14" height="14" rx="3" fill="#FF8FB1"/>'+
+         '<rect x="44" y="20" width="14" height="14" rx="3" fill="#7BD36B"/>'+
+         '<rect x="30" y="48" width="16" height="14" rx="3" fill="#4FBEE8"/>',
+  box: BG+'<path d="M24 44h52v30H24z" fill="#E8A961" stroke="#C98342" stroke-width="3"/>'+
+       '<path d="M24 44l10-12h32l10 12z" fill="#F7D6A8" stroke="#C98342" stroke-width="3"/>'+
+       '<path d="M50 32v42" stroke="#C98342" stroke-width="3"/>',
+  cap: BG+'<path d="M26 62c0-16 10-26 24-26s24 10 24 26z" fill="#4FBEE8"/>'+
+       '<path d="M22 62h60c0 6-6 10-14 10H36c-8 0-14-4-14-10z" fill="#2F8FE0"/>'+
+       '<circle cx="50" cy="34" r="5" fill="#FFD21F"/>',
+  map: BG+'<path d="M22 30l20-8 18 8 18-8v46l-18 8-18-8-20 8z" fill="#FFF6EC" stroke="#C9C0D4" stroke-width="3"/>'+
+       '<path d="M42 22v46M60 30v46" stroke="#C9C0D4" stroke-width="2.4"/>'+
+       '<path d="M28 44l10 12 10-8" fill="none" stroke="#FF6B8B" stroke-width="3" stroke-linecap="round"/>'+
+       '<circle cx="66" cy="52" r="5" fill="#FF6B8B"/>',
+  piggy: BG+'<ellipse cx="50" cy="54" rx="30" ry="24" fill="#FF9AB5"/>'+
+         '<circle cx="34" cy="48" r="6" fill="#FFB0C6"/><circle cx="28" cy="48" r="4" fill="#FF7AA2"/>'+
+         '<ellipse cx="74" cy="54" rx="8" ry="7" fill="#FFB0C6"/><circle cx="72" cy="52" r="2" fill="#E86A9B"/><circle cx="77" cy="52" r="2" fill="#E86A9B"/>'+
+         '<circle cx="60" cy="46" r="2.6" fill="#3D3A4E"/>'+
+         '<rect x="42" y="34" width="16" height="5" rx="2" fill="#E86A9B"/>'+
+         '<path d="M34 76h10M56 76h10" stroke="#E86A9B" stroke-width="6" stroke-linecap="round"/>',
+  pos_on: BG+'<rect x="28" y="58" width="44" height="22" rx="4" fill="#E8A961" stroke="#C98342" stroke-width="3"/>'+
+          '<path d="M28 58l8-8h28l8 8z" fill="#F7D6A8" stroke="#C98342" stroke-width="2"/>'+
+          '<circle cx="50" cy="42" r="13" fill="#FF6B8B"/>'+
+          '<path d="M20 84h60" stroke="#C9C0D4" stroke-width="4" stroke-linecap="round"/>',
+  pos_in: BG+'<rect x="26" y="44" width="48" height="34" rx="4" fill="#E8A961" stroke="#C98342" stroke-width="3"/>'+
+          '<path d="M26 44l10-10h28l10 10z" fill="#F7D6A8" stroke="#C98342" stroke-width="2"/>'+
+          '<circle cx="50" cy="60" r="13" fill="#FF6B8B"/>'+
+          '<path d="M26 44h48" stroke="#C98342" stroke-width="3"/>',
+  pos_under: BG+'<rect x="28" y="26" width="44" height="22" rx="4" fill="#E8A961" stroke="#C98342" stroke-width="3"/>'+
+             '<path d="M28 26l8-8h28l8 8z" fill="#F7D6A8" stroke="#C98342" stroke-width="2"/>'+
+             '<circle cx="50" cy="68" r="13" fill="#FF6B8B"/>'+
+             '<path d="M20 84h60" stroke="#C9C0D4" stroke-width="4" stroke-linecap="round"/>',
+
+  // —— 国旗（三下 U1 国家） ——
+  flagCN: BG+'<rect x="26" y="32" width="48" height="32" rx="3" fill="#EE1C25"/>'+
+          '<circle cx="38" cy="44" r="5" fill="#FFDE00"/>'+
+          '<circle cx="49" cy="38" r="2.4" fill="#FFDE00"/><circle cx="54" cy="45" r="2.4" fill="#FFDE00"/><circle cx="49" cy="52" r="2.4" fill="#FFDE00"/>',
+  flagUK: BG+'<rect x="26" y="32" width="48" height="32" rx="3" fill="#012169"/>'+
+          '<path d="M26 32l48 32M74 32L26 64" stroke="#fff" stroke-width="5"/>'+
+          '<path d="M50 32v32M26 48h48" stroke="#fff" stroke-width="8"/>'+
+          '<path d="M50 32v32M26 48h48" stroke="#C8102E" stroke-width="4"/>',
+  flagCA: BG+'<rect x="24" y="32" width="52" height="32" rx="3" fill="#fff" stroke="#D8CFC4" stroke-width="2"/>'+
+          '<rect x="30" y="32" width="12" height="32" fill="#FF0000"/><rect x="58" y="32" width="12" height="32" fill="#FF0000"/>'+
+          '<path d="M48 40l3 5 5 1-4 4 1 6-5-3-5 3 1-6-4-4 5-1z" fill="#FF0000"/>',
+  flagUS: BG+'<rect x="24" y="34" width="52" height="28" rx="2" fill="#fff" stroke="#D8CFC4" stroke-width="2"/>'+
+          '<path d="M24 38h52M24 46h52M24 54h52" stroke="#B22234" stroke-width="5"/>'+
+          '<rect x="24" y="34" width="22" height="14" fill="#3C3B6E"/>'+
+          '<circle cx="30" cy="38" r="1.4" fill="#fff"/><circle cx="38" cy="42" r="1.4" fill="#fff"/><circle cx="30" cy="45" r="1.4" fill="#fff"/>'
+};
+
+function artSvg(word){
+  var key = word.art, inner = '', cls = '';
+  if(!key){
+    inner = BG+'<path d="M30 40h40M38 54h24M30 68h40" stroke="#FFB0C6" stroke-width="7" stroke-linecap="round"/>'+
+            '<circle cx="72" cy="30" r="5" fill="#FFD21F"/>';
+  } else if(key.indexOf('chip:')===0){
+    var c = key.slice(5);
+    inner = BG+'<circle cx="50" cy="50" r="34" fill="'+c+'" stroke="#E4D6CB" stroke-width="3"/>';
+  } else if(key.indexOf('scene:')===0){
+    // 抽象词场景卡：复用具象图标 + 淡蓝底 + 底部小标签，表示「这是一个概念」
+    var ik = key.slice(6), ic = ART[ik] || '';
+    inner = '<circle cx="50" cy="50" r="46" fill="#EEF4FF"/>'+
+            '<circle cx="50" cy="50" r="35" fill="none" stroke="#C9DBF7" stroke-width="2" stroke-dasharray="5 5"/>'+
+            '<g transform="translate(50,45) scale(0.6) translate(-50,-50)">'+ic+'</g>'+
+            '<rect x="36" y="76" width="28" height="6" rx="3" fill="#B8CCF0"/>';
+  } else if(key.indexOf('num:')===0){
+    var n = key.slice(4);
+    inner = BG+'<rect x="18" y="18" width="64" height="64" rx="18" fill="#FFF0F5" stroke="#FFB0C6" stroke-width="3"/>'+
+            '<text x="50" y="63" text-anchor="middle" font-size="42" font-weight="900" fill="#FF7AA2" font-family="-apple-system,Segoe UI,Arial,sans-serif">'+esc(n)+'</text>';
+  } else {
+    inner = ART[key] || (BG+'<circle cx="50" cy="50" r="26" fill="#FFEFE3"/>');
+  }
+  return '<svg class="illus" viewBox="0 0 100 100" role="img" aria-label="'+esc(word.en)+'">'+inner+'</svg>';
+}
+
+/* ---------- 3. 状态与存储 ---------- */
+var STAGE_DAYS = [0, 1, 2, 4, 7, 15];  // 阶段对应的复习间隔（天）
+var MAX_REVIEW = 8;                     // 每天最多安排的复习词数
+
+var state = null;
+var ui = { tab:'today', queue:[], idx:0, mode:'normal', revealed:false, learned:false, lastBlob:null, lastScore:null };
+
+function defaultState(){
+  return {
+    v:1, created:todayStr(),
+    settings:{ dailyNew:6, asr:'auto', rate:0.85, boost:false, boostMix:2 },
+    words:{}, stars:0, streak:{ n:0, last:null },
+    days:{}, demo:false
+  };
+}
+function demoState(){
+  var s = defaultState();
+  s.demo = true;
+  s.stars = 24;
+  s.streak = { n:2, last:addDays(todayStr(),-1) };
+  var seed = [
+    ['1-ear',   2, -2],
+    ['1-eye',   1,  0],
+    ['1-hand',  1,  1],
+    ['1-mouth', 3,  0]
+  ];
+  seed.forEach(function(row){
+    var w = getWord(row[0]);
+    if(!w) return;
+    s.words[w.id] = { s:row[1], due:addDays(todayStr(), row[2]), seen:row[1]>0?2:0, right:row[1]>0?2:0, wrong:0, best: row[1]>0?86:null };
+  });
+  // 昨天有计划但没全部完成 —— 制造 1 条「逾期补练」，演示没做完会自动顺延到今天
+  var y = addDays(todayStr(),-1);
+  s.days[y] = { target:4, planned:['1-eye','1-smile','1-ear','1-help'], done:['1-eye','1-smile','1-help'], completed:false };
+  return s;
+}
+function loadState(){
+  try{
+    var raw = localStorage.getItem(KEY_STATE);
+    if(!raw){ state = demoState(); saveState(); return; }
+    var obj = JSON.parse(raw);
+    var base = defaultState();
+    // 先留一份默认 settings 的引用：Object.assign(base, obj) 会把 base.settings 整体换成旧的
+    // （旧备份里没有 boost / boostMix 等新字段，直接合并会导致新设置项变成 undefined）
+    var baseSettings = base.settings;
+    state = Object.assign(base, obj);
+    state.settings = Object.assign({}, baseSettings, obj.settings||{});
+    state.streak = Object.assign({n:0,last:null}, obj.streak||{});
+    if(!state.words) state.words = {};
+    if(!state.days) state.days = {};
+  }catch(e){ state = demoState(); }
+}
+var saveTimer = null;
+function saveState(){
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(function(){
+    try{
+      localStorage.setItem(KEY_STATE, JSON.stringify(state));
+      var chip = $('saveChip');
+      chip.querySelector('span').textContent = '本地已保存';
+    }catch(e){ toast('保存失败：浏览器存储空间不足'); }
+  }, 220);
+}
+
+/* ---------- 4. 学习调度引擎（纯计算层，不碰 DOM） ---------- */
+function wState(id){
+  if(!state.words[id]) state.words[id] = { s:0, due:todayStr(), seen:0, right:0, wrong:0, best:null };
+  return state.words[id];
+}
+function unitProgress(no){
+  var list = unitWords(no), touched = 0, mastered = 0;
+  list.forEach(function(w){
+    var st = state.words[w.id];
+    if(st && st.s>0) touched++;
+    if(st && st.s>=4) mastered++;
+  });
+  return { total:list.length, touched:touched, mastered:mastered, pct: list.length? touched/list.length : 0 };
+}
+function unlockedUnits(){
+  var out = [1];
+  for(var n=2;n<=UNITS.length;n++){ if(unitProgress(n-1).pct >= 0.6) out.push(n); }
+  return out;
+}
+// u=0 补充池：由家长开关控制，不占闯关地图，不参与单元解锁链
+function boostOn(){ return !!(state && state.settings && state.settings.boost); }
+function usableUnit(no){ return no===0 ? boostOn() : unlockedUnits().indexOf(no)>=0; }
+function isUnlocked(no){ return unlockedUnits().indexOf(no)>=0; }
+
+function dueReviews(date){
+  var out = [];
+  WORDS.forEach(function(w){
+    var st = state.words[w.id];
+    if(!st || st.s<=0) return;
+    if(!usableUnit(w.u)) return;
+    if(diffDays(st.due, date) >= 0) out.push({ id:w.id, overdue: diffDays(st.due, date) });
+  });
+  out.sort(function(a,b){ return b.overdue - a.overdue; });
+  return out;
+}
+function pickNewWords(date, n){
+  var unlocked = unlockedUnits(), out = [];
+  for(var i=0;i<unlocked.length && out.length<n;i++){
+    var list = unitWords(unlocked[i]);
+    for(var j=0;j<list.length && out.length<n;j++){
+      var st = state.words[list[j].id];
+      if(!st || st.s===0) out.push(list[j].id);
+    }
+  }
+  return out;
+}
+// 从补充池（u=0）挑还没学过的词
+function pickBoostWords(n){
+  if(!boostOn()) return [];
+  var list = unitWords(0), out = [];
+  for(var i=0;i<list.length && out.length<n;i++){
+    var st = state.words[list[i].id];
+    if(!st || st.s===0) out.push(list[i].id);
+  }
+  return out;
+}
+function planDay(date){
+  var revRaw = dueReviews(date).slice(0, MAX_REVIEW);
+  var rev = revRaw.map(function(r){ return r.id; });
+  var need = Math.max(0, state.settings.dailyNew - rev.length);
+  var fresh = pickNewWords(date, state.settings.dailyNew);
+  var plan = rev.concat(fresh.slice(0, Math.min(fresh.length, need)));
+  // 家长开启「补充词库」时，每天额外混入 BOOST_MIX 个功能词/拓展词
+  if(boostOn() && need > 0){
+    var per = state.settings.boostMix || 2;
+    var extra = pickBoostWords(Math.min(per, need));
+    for(var k=0;k<extra.length;k++){ if(plan.indexOf(extra[k])<0) plan.push(extra[k]); }
+  }
+  return plan;
+}
+function ensureDay(date){
+  if(!state.days[date]) state.days[date] = { target: state.settings.dailyNew, planned: planDay(date), done: [], completed:false };
+  var d = state.days[date];
+  if(!d.planned) d.planned = planDay(date);
+  return d;
+}
+// 往日没做完的自动顺延到今天（铁律5：不凭空消失）
+function carryOver(date){
+  var carried = [], limit = 7;
+  var keys = Object.keys(state.days).filter(function(k){ return k < date; }).sort();
+  for(var i=keys.length-1; i>=0 && i>=keys.length-limit; i--){
+    var d = state.days[keys[i]];
+    if(!d || d.completed || !d.planned) continue;
+    d.planned.forEach(function(id){
+      if(d.done.indexOf(id)<0 && carried.indexOf(id)<0) carried.push({ id:id, from:keys[i] });
+    });
+  }
+  return carried;
+}
+
+/* ---------- 5. 星星与等级 ---------- */
+var LEVELS = [
+  { min:0,    name:'小星星',   en:'Little Star' },
+  { min:50,   name:'月亮宝宝', en:'Moon Baby' },
+  { min:150,  name:'小火箭',   en:'Rocket Kid' },
+  { min:300,  name:'英语达人', en:'English Star' },
+  { min:600,  name:'超级星星王', en:'Super Star King' },
+  { min:1000, name:'银河小博士', en:'Galaxy Master' }
+];
+function levelInfo(stars){
+  var cur = LEVELS[0], next = LEVELS[1];
+  for(var i=0;i<LEVELS.length;i++){
+    if(stars >= LEVELS[i].min){ cur = LEVELS[i]; next = LEVELS[i+1] || null; }
+  }
+  var base = cur.min, top = next ? next.min : cur.min;
+  var pct = next ? clamp((stars-base)/(top-base), 0, 1) : 1;
+  return { cur:cur, next:next, pct:pct, remain: next ? (next.min - stars) : 0 };
+}
+function addStars(n){
+  state.stars += n;
+  saveState();
+  refreshAll();
+}
+
+/* ---------- 6. 完成与复习 ---------- */
+function markResult(id, ok, score){
+  var st = wState(id);
+  st.seen++;
+  if(score!=null){ if(st.best==null || score>st.best) st.best = score; }
+  if(ok){
+    st.right++;
+    st.s = Math.min(5, st.s + 1);
+    st.due = addDays(todayStr(), STAGE_DAYS[st.s]);
+  }else{
+    st.wrong++;
+    st.s = Math.max(1, st.s - 1);
+    st.due = addDays(todayStr(), 1);
+  }
+  var d = ensureDay(todayStr());
+  if(d.done.indexOf(id)<0) d.done.push(id);
+  saveState();
+}
+function dayDoneAll(date){
+  var d = ensureDay(date);
+  return d.planned.length>0 && d.planned.every(function(id){ return d.done.indexOf(id)>=0; });
+}
+
+/* ---------- 7. 语音引擎：朗读(TTS) + 跟读打分(ASR) + 录音兜底 ---------- */
+var voices = [];
+function loadVoices(){
+  try{ voices = window.speechSynthesis ? (window.speechSynthesis.getVoices()||[]) : []; }
+  catch(e){ voices = []; }
+}
+function pickVoice(){
+  if(!voices.length) loadVoices();
+  var prefer = ['Samantha','Karen','Google US English','Google UK English Female','Microsoft Zira','Microsoft Aria'];
+  var en = voices.filter(function(v){ return /^en(-|_)/i.test(v.lang); });
+  if(!en.length) return null;
+  for(var i=0;i<prefer.length;i++){
+    for(var j=0;j<en.length;j++){ if(en[j].name.indexOf(prefer[i])>=0) return en[j]; }
+  }
+  for(var k=0;k<en.length;k++){ if(/en-US/i.test(en[k].lang)) return en[k]; }
+  return en[0];
+}
+function speak(text, cb){
+  if(!('speechSynthesis' in window)){ toast('这个浏览器不支持朗读'); if(cb) cb(); return; }
+  try{
+    window.speechSynthesis.cancel();
+    var u = new SpeechSynthesisUtterance(text);
+    u.lang = 'en-US';
+    u.rate = state.settings.rate || 0.85;
+    u.pitch = 1.15;
+    var v = pickVoice();
+    if(v) u.voice = v;
+    if(cb){ u.onend = cb; u.onerror = cb; }
+    window.speechSynthesis.speak(u);
+  }catch(e){ if(cb) cb(); }
+}
+
+var SR = window.SpeechRecognition || window.webkitSpeechRecognition || null;
+var rec = null;
+var runningAsr = false;
+
+function asrEnabled(){
+  if(state.settings.asr === 'off') return false;
+  return !!SR && (window.isSecureContext !== false);
+}
+function listenOnce(cb, timeoutMs){
+  if(!asrEnabled()){ cb({ ok:false, reason:'unsupported' }); return; }
+  try{
+    rec = new SR();
+  }catch(e){ cb({ ok:false, reason:'unsupported' }); return; }
+  rec.lang = 'en-US';
+  rec.interimResults = false;
+  rec.maxAlternatives = 3;
+  var done = false, timer = null;
+  function finish(r){
+    if(done) return; done = true;
+    runningAsr = false;
+    clearTimeout(timer);
+    try{ rec.onresult=null; rec.onerror=null; rec.onend=null; rec.stop(); }catch(e){}
+    cb(r);
+  }
+  rec.onresult = function(ev){
+    var alts = [], i;
+    for(i=0;i<ev.results[0].length;i++) alts.push(ev.results[0][i].transcript);
+    finish({ ok:true, text:alts[0], alts:alts });
+  };
+  rec.onerror = function(ev){
+    var err = ev && ev.error ? ev.error : 'unknown';
+    finish({ ok:false, reason: err });
+  };
+  rec.onend = function(){ if(!done) finish({ ok:false, reason:'silent' }); };
+  try{
+    runningAsr = true;
+    rec.start();
+    timer = setTimeout(function(){ finish({ ok:false, reason:'timeout' }); }, timeoutMs || 6500);
+  }catch(e){ finish({ ok:false, reason:'start-fail' }); }
+}
+// 录音兜底：设备不支持识别或服务不可用时，用录音回听自评
+var mediaRec = null, audioChunks = [], audioUrl = null;
+function startRecording(cb){
+  if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia || typeof MediaRecorder==='undefined'){
+    cb({ ok:false, reason:'unsupported' }); return;
+  }
+  navigator.mediaDevices.getUserMedia({ audio:true }).then(function(stream){
+    audioChunks = [];
+    try{ mediaRec = new MediaRecorder(stream); }
+    catch(e){ cb({ ok:false, reason:'unsupported' }); return; }
+    mediaRec.ondataavailable = function(e){ if(e.data && e.data.size) audioChunks.push(e.data); };
+    mediaRec.onstop = function(){
+      if(audioUrl) { try{ URL.revokeObjectURL(audioUrl); }catch(e){} }
+      try{ stream.getTracks().forEach(function(t){ t.stop(); }); }catch(e){}
+      if(!audioChunks.length){ cb({ ok:false, reason:'silent' }); return; }
+      var blob = new Blob(audioChunks, { type:'audio/webm' });
+      audioUrl = URL.createObjectURL(blob);
+      cb({ ok:true, url:audioUrl });
+    };
+    mediaRec.start();
+    setTimeout(function(){ try{ if(mediaRec && mediaRec.state==='recording') mediaRec.stop(); }catch(e){} }, 4000);
+  }).catch(function(){ cb({ ok:false, reason:'denied' }); });
+}
+function stopRecording(){ try{ if(mediaRec && mediaRec.state==='recording') mediaRec.stop(); }catch(e){} }
+function playRecording(){ if(audioUrl){ var a = new Audio(audioUrl); a.play().catch(function(){}); } }
+
+// 综合打分：识别文本相似度 + 一些小规则
+function scorePronounce(target, res){
+  var best = 0, heard = '', i;
+  var list = res.alts && res.alts.length ? res.alts : [res.text];
+  for(i=0;i<list.length;i++){
+    var s = similarity(list[i], target);
+    if(s > best){ best = s; heard = list[i]; }
+  }
+  // 连词 ego：目标是词组时，命中任意一个词给基础分
+  var parts = String(target).split(' ');
+  if(parts.length>1){
+    for(i=0;i<parts.length;i++){
+      var ps = similarity(res.text, parts[i]);
+      if(ps > best){ best = ps*0.9; heard = res.text; }
+    }
+  }
+  return { score: Math.round(best*100), heard: heard || res.text };
+}
+function feedbackOf(score){
+  if(score >= 85) return { cls:'good',  msg:['太棒啦！发音很标准','完美！她读得很清楚','真厉害，一次就过关'] };
+  if(score >= 65) return { cls:'mid',   msg:['还不错！再清楚一点就满分','差不多啦，多读两遍','加油，差一点点'] };
+  return { cls:'bad',  msg:['再听一遍老师的发音好吗？','慢慢来，跟着一起读','没关系，多练几次就会了'] };
+}
+function pickOne(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+
+/* ---------- 8. 渲染层：顶部 / 今日 ---------- */
+function renderTop(){
+  $('starCount').textContent = state.stars;
+  $('demoBar').style.display = state.demo ? 'flex' : 'none';
+}
+function todayItems(){
+  var t = todayStr(), d = ensureDay(t), carried = carryOver(t), items = [], seen = {};
+  carried.forEach(function(c){
+    if(d.done.indexOf(c.id)>=0) return;
+    seen[c.id] = 1;
+    items.push({ id:c.id, kind:'carry', from:c.from });
+  });
+  d.planned.forEach(function(id){
+    if(d.done.indexOf(id)>=0 || seen[id]) return;
+    seen[id] = 1;
+    var st = state.words[id];
+    items.push({ id:id, kind: (st && st.s>0) ? 'rev' : 'new' });
+  });
+  return items;
+}
+function renderToday(){
+  renderTop();
+  var t = todayStr(), d = ensureDay(t), items = todayItems();
+  $('todayCount').textContent = items.length;
+  var doneToday = d.done.length;
+  var totalToday = d.planned.length;
+  if(items.length===0){
+    $('todayTip').textContent = doneToday>0 ? ('今天的任务全部完成啦，已经练了 ' + doneToday + ' 个单词，超棒！') : '今天还没有安排单词，点下面的按钮开始吧～';
+  }else{
+    var over = items.filter(function(i){ return i.kind==='carry'; }).length;
+    $('todayTip').textContent = over>0 ? ('有 ' + over + ' 个是前几天没练完的，今天补上就好啦～') : '完成今天的练习，就能拿到星星奖励～';
+  }
+  var box = $('dueList');
+  box.innerHTML = '';
+  if(items.length===0){
+    var e = el('div','emptybox');
+    e.innerHTML = '<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="#E7F8E7"/><path d="M34 52l12 12 22-26" stroke="#6BD36B" stroke-width="8" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>'+
+                  '<p>今天的任务清空啦！</p><p class="muted">明天再来，星星会一直等着你</p>';
+    box.appendChild(e);
+  }else{
+    items.slice(0,12).forEach(function(it){
+      var w = getWord(it.id); if(!w) return;
+      var row = el('div','due-item' + (it.kind==='carry' ? ' overdue' : ''));
+      var badge = it.kind==='carry' ? '<span class="badge od">补练 '+esc(it.from.slice(5))+'</span>'
+                : it.kind==='rev' ? '<span class="badge rev">要复习</span>'
+                : '<span class="badge new">新单词</span>';
+      row.innerHTML = '<div class="w">'+esc(w.en)+'<small>'+esc(w.cn)+' '+esc(w.ph)+'</small></div>'+badge;
+      var b = el('button','btn ' + (it.kind==='carry'?'':'green') + ' sm','去练');
+      b.style.whiteSpace = 'nowrap';
+      b.addEventListener('click', function(){ goLearn(it.id); });
+      row.appendChild(b);
+      box.appendChild(row);
+    });
+    if(items.length>12){
+      box.appendChild(el('div','muted','……还有 ' + (items.length-12) + ' 个，开始学习后会依次出现'));
+    }
+  }
+  var pct = totalToday ? Math.round(doneToday/totalToday*100) : 0;
+  $('todayBar').style.width = pct + '%';
+  $('todayBarText').textContent = '今日进度 ' + doneToday + ' / ' + totalToday;
+  var btn = $('btnStartLearn');
+  btn.querySelector('span').textContent = doneToday>0 ? '继续今天的学习' : '开始今天的学习';
+}
+
+/* ---------- 9. 渲染层：学习卡 ---------- */
+function renderLearn(){
+  renderTop();
+  var t = todayStr(), d = ensureDay(t);
+  if(!ui.queue.length){
+    $('learnEmpty').style.display = 'block';
+    $('learnBody').style.display = 'none';
+    $('quizHint').style.display = 'none';
+    $('quizOpts').style.display = 'none';
+    $('tipDone').style.display = (d.done.length>0 && !todayItems().length) ? 'block' : 'none';
+    return;
+  }
+  $('learnEmpty').style.display = 'none';
+  $('learnBody').style.display = 'block';
+  $('tipDone').style.display = 'none';
+  $('wWord').style.display = '';
+  $('wPho').style.display = '';
+  $('wCn').style.display = '';
+  $('wEx').style.display = '';
+  $('wPills').style.display = '';
+  $('readCard').style.display = '';
+  $('btnExample').style.display = '';
+  $('btnReveal').style.display = '';
+  $('btnMaster').style.display = '';
+  $('btnAgain').style.display = '';
+  $('btnBackToday').textContent = '先练到这';
+  ui.idx = clamp(ui.idx, 0, ui.queue.length-1);
+  var id = ui.queue[ui.idx];
+  var w = getWord(id); if(!w){ nextWord(); return; }
+  var st = wState(id);
+
+  ui.revealed = false;
+  ui.learned = false;
+  ui.lastScore = null;
+  $('wWord').textContent = w.en;
+  $('wPho').textContent = w.ph;
+  $('wCn').textContent = w.cn;
+  $('wCn').classList.add('hide');
+  $('wEx').textContent = w.ex ? ('例：' + w.ex) : '';
+  $('illusBox').innerHTML = artSvg(w);
+
+  var tags = $('learnTags'); tags.innerHTML = '';
+  var uu = unitById(w.u);
+  tags.appendChild(el('span','tag','Unit '+w.u+' · '+esc(uu.name)));
+  tags.appendChild(el('span','tag', st.s>0 ? '复习第'+st.s+'轮' : '第一次见'));
+  if(st.best!=null) tags.appendChild(el('span','tag','最好 '+st.best+' 分'));
+
+  var pills = $('wPills'); pills.innerHTML = '';
+  pills.appendChild(el('span','pill', '练了 '+st.seen+' 次'));
+  pills.appendChild(el('span','pill ok', '答对 '+st.right+' 次'));
+  if(st.wrong) pills.appendChild(el('span','pill warn', '还要练 '+st.wrong+' 次'));
+  if(st.s>=4) pills.appendChild(el('span','pill ok','已掌握'));
+
+  $('learnBar').style.width = Math.round(ui.idx/ui.queue.length*100) + '%';
+  $('learnBarText').textContent = '第 ' + (ui.idx+1) + ' / ' + ui.queue.length + ' 个';
+
+  $('fbBox').classList.remove('show');
+  $('selfJudge').style.display = 'none';
+  $('btnReplay').style.display = 'none';
+  $('recLabel').textContent = asrEnabled() ? '点我说话' : '点我录音';
+  $('quizOpts').style.display = 'none';
+  $('quizHint').style.display = 'none';
+}
+
+/* ---------- 10. 学习动作 ---------- */
+function goLearn(focusId){
+  var items = todayItems();
+  ui.queue = items.map(function(i){ return i.id; });
+  if(focusId){
+    var p = ui.queue.indexOf(focusId);
+    ui.idx = p>=0 ? p : 0;
+  }else{
+    ui.idx = 0;
+  }
+  ui.mode = 'normal';
+  showTab('learn');
+  refreshAll();
+  if(ui.queue.length) speakLater(ui.queue[ui.idx], 260);
+}
+function goReviewAll(){
+  var learned = [];
+  WORDS.forEach(function(w){
+    var st = state.words[w.id];
+    if(st && st.s>0 && st.s<5) learned.push(w.id);
+  });
+  if(!learned.length){ toast('还没有学过的内容，先去今日练一练吧'); return; }
+  ui.queue = shuffle(learned).slice(0,10);
+  ui.idx = 0; ui.mode = 'normal';
+  showTab('learn'); refreshAll();
+  if(ui.queue.length) speakLater(ui.queue[0], 260);
+}
+function nextWord(){
+  ui.idx++;
+  if(ui.idx >= ui.queue.length){
+    ui.queue = []; ui.idx = 0;
+    var finishedAll = !todayItems().length;
+    refreshAll();
+    if(finishedAll) finishDayCelebrate();
+    else toast('这一轮练完啦！');
+    return;
+  }
+  var nextId = ui.queue[ui.idx];
+  if(!nextId){ ui.queue = []; ui.idx = 0; refreshAll(); return; }
+  refreshAll();
+  speakLater(nextId, 180);
+}
+// 延迟朗读：先取快照再发声，避免异步回调读到已经变化的下标
+function speakLater(id, delay){
+  setTimeout(function(){
+    if(ui.mode === 'quiz') return;
+    var w = getWord(id);
+    if(w) speak(w.en);
+  }, delay || 200);
+}
+function markCurrent(ok, score){
+  if(!ui.queue.length) return;
+  var id = ui.queue[ui.idx];
+  markResult(id, ok, score);
+  var gain = 0;
+  if(ok){
+    gain = 1;
+    if(score!=null && score>=85) gain = 3;
+    else if(score!=null && score>=65) gain = 2;
+    state.stars += gain;
+    saveState();
+  }
+  if(!ok){
+    if(ui.queue.indexOf(id)>=0) ui.queue.push(id);
+  }
+  nextWord();
+}
+function finishDayCelebrate(){
+  var t = todayStr(), d = ensureDay(t);
+  if(d.completed) return;
+  d.completed = true;
+  var gain = 8;
+  if(state.streak.last === addDays(t,-1)) state.streak.n = (state.streak.n||0) + 1;
+  else if(state.streak.last === t){ /* 同一天不重复加 */ }
+  else state.streak.n = 1;
+  state.streak.last = t;
+  gain += Math.min(10, (state.streak.n-1) * 2);
+  state.stars += gain;
+  saveState();
+  $('celTitle').textContent = '今天太棒啦！';
+  $('celSub').textContent = '完成全部任务，获得 ' + gain + ' 颗星星，已经连续打卡 ' + state.streak.n + ' 天！';
+  $('celebrate').classList.add('show');
+  refreshAll();
+}
+
+/* ---------- 11. 渲染层：成长 ---------- */
+function unitIcon(no, color, locked){
+  return '<svg viewBox="0 0 48 48" width="46" height="46">'+
+    '<rect x="3" y="3" width="42" height="42" rx="14" fill="'+(locked?'#E9E2EE':color)+'"/>'+
+    '<text x="24" y="32" text-anchor="middle" font-size="'+(no>=10?17:22)+'" font-weight="900" fill="#fff" font-family="-apple-system,Segoe UI,Arial,sans-serif">'+no+'</text>'+
+    (locked?'<path d="M20 24v-4a4 4 0 018 0v4" stroke="#8B8397" stroke-width="3" fill="none"/>':'')+
+  '</svg>';
+}
+function renderGrow(){
+  renderTop();
+  var stars = state.stars;
+  $('growStars').textContent = stars;
+  var li = levelInfo(stars);
+  $('levelName').textContent = li.cur.name + ' · ' + li.cur.en;
+  $('levelNext').textContent = li.next ? ('再得 ' + li.remain + ' 颗星，就能升级成「' + li.next.name + '」') : '已经是最高等级啦，太厉害了！';
+  $('levelBar').style.width = Math.round(li.pct*100) + '%';
+
+  var unlocked = unlockedUnits(), map = $('unitMap');
+  map.innerHTML = '';
+  UNITS.forEach(function(u){
+    var p = unitProgress(u.no);
+    var locked = unlocked.indexOf(u.no)<0;
+    var row = el('div','unitrow' + (locked?' locked':''));
+    row.innerHTML = unitIcon(u.no, u.color, locked) +
+      '<div class="umain">'+
+        '<div class="utitle">Unit '+u.no+' · '+esc(u.name)+'</div>'+
+        '<div class="umeta">'+esc(u.book||'')+' · '+esc(u.en)+' · 已学 '+p.touched+'/'+p.total+' · 掌握 '+p.mastered+'</div>'+
+        '<div class="uminibar"><i style="width:'+Math.round(p.pct*100)+'%"></i></div>'+
+      '</div>'+
+      (locked ? '<span class="lockflag">学完上一单元解锁</span>' : '<span class="badge '+(p.pct>=1?'od':'new')+'" style="background:#FFF3E0;color:#B4741E">'+Math.round(p.pct*100)+'%</span>');
+    map.appendChild(row);
+  });
+
+  var completedDays = Object.keys(state.days).filter(function(k){ return state.days[k] && state.days[k].completed; });
+  var mastered = 0, learning = 0;
+  WORDS.forEach(function(w){
+    var st = state.words[w.id];
+    if(!st || st.s===0) return;
+    if(st.s>=4) mastered++; else learning++;
+  });
+  $('statStreak').textContent = state.streak.n || 0;
+  $('statDays').textContent = completedDays.length;
+  $('statMaster').textContent = mastered;
+
+  // 当月打卡日历
+  var now = new Date(), y = now.getFullYear(), m = now.getMonth();
+  var first = new Date(y, m, 1), startPad = first.getDay();
+  var daysInMonth = new Date(y, m+1, 0).getDate();
+  var cal = $('calWrap'); cal.innerHTML = '';
+  ['日','一','二','三','四','五','六'].forEach(function(h){ cal.appendChild(el('div','h',h)); });
+  var i;
+  for(i=0;i<startPad;i++) cal.appendChild(el('div','d empty',''));
+  for(i=1;i<=daysInMonth;i++){
+    var ds = y + '-' + (m<9?'0':'') + (m+1) + '-' + (i<10?'0':'') + i;
+    var dd = state.days[ds];
+    var cls = 'd' + (dd && dd.completed ? ' done' : '') + (ds===todayStr() ? ' today' : '');
+    cal.appendChild(el('div', cls, String(i)));
+  }
+}
+
+/* ---------- 12. 渲染层：家长（含内联 SVG 图表） ---------- */
+function barChart(data){
+  // data: [{label, value}]
+  var w = 320, h = 150, padL = 26, padB = 24, padT = 10;
+  var max = 1;
+  data.forEach(function(d){ if(d.value>max) max = d.value; });
+  var bw = (w - padL - 10) / data.length;
+  var s = '<svg viewBox="0 0 '+w+' '+h+'" width="100%" height="'+h+'" preserveAspectRatio="xMidYMid meet">';
+  s += '<line x1="'+padL+'" y1="'+(h-padB)+'" x2="'+(w-6)+'" y2="'+(h-padB)+'" stroke="#E4D6CB" stroke-width="2"/>';
+  s += '<text x="2" y="16" font-size="11" font-weight="700" fill="#8B8397">'+max+'</text>';
+  data.forEach(function(d, i){
+    var bh = Math.max(2, (h - padB - padT) * (d.value/max));
+    var x = padL + i*bw + bw*0.2, bwid = bw*0.6, yv = h - padB - bh;
+    var col = d.value>0 ? '#FF7AA2' : '#EFE6F5';
+    s += '<rect x="'+x+'" y="'+yv+'" width="'+bwid+'" height="'+bh+'" rx="5" fill="'+col+'"/>';
+    if(d.value>0) s += '<text x="'+(x+bwid/2)+'" y="'+(yv-4)+'" text-anchor="middle" font-size="11" font-weight="800" fill="#F4557F">'+d.value+'</text>';
+    s += '<text x="'+(x+bwid/2)+'" y="'+(h-padB+16)+'" text-anchor="middle" font-size="11" font-weight="700" fill="#8B8397">'+esc(d.label)+'</text>';
+  });
+  s += '</svg>';
+  return s;
+}
+function donutChart(parts){
+  // parts: [{label, value, color}]
+  var total = 0;
+  parts.forEach(function(p){ total += p.value; });
+  var cx = 70, cy = 70, r = 52, rr = 30, acc = 0;
+  var s = '<svg viewBox="0 0 220 150" width="100%" height="150" preserveAspectRatio="xMidYMid meet">';
+  if(total===0){
+    s += '<circle cx="'+cx+'" cy="'+cy+'" r="'+((r+rr)/2)+'" fill="none" stroke="#EFE6F5" stroke-width="'+(r-rr)+'"/>';
+    s += '<text x="'+cx+'" y="'+(cy+5)+'" text-anchor="middle" font-size="13" font-weight="800" fill="#8B8397">还没有数据</text>';
+  }else{
+    parts.forEach(function(p){
+      if(p.value<=0) return;
+      var frac = p.value/total;
+      var a0 = acc*Math.PI*2 - Math.PI/2;
+      var a1 = (acc+frac)*Math.PI*2 - Math.PI/2;
+      acc += frac;
+      var large = frac>0.5 ? 1 : 0;
+      var x0 = cx + r*Math.cos(a0), y0 = cy + r*Math.sin(a0);
+      var x1 = cx + r*Math.cos(a1), y1 = cy + r*Math.sin(a1);
+      var xi1 = cx + rr*Math.cos(a1), yi1 = cy + rr*Math.sin(a1);
+      var xi0 = cx + rr*Math.cos(a0), yi0 = cy + rr*Math.sin(a0);
+      s += '<path d="M'+x0.toFixed(2)+' '+y0.toFixed(2)+'A'+r+' '+r+' 0 '+large+' 1 '+x1.toFixed(2)+' '+y1.toFixed(2)+
+           'L'+xi1.toFixed(2)+' '+yi1.toFixed(2)+'A'+rr+' '+rr+' 0 '+large+' 0 '+xi0.toFixed(2)+' '+yi0.toFixed(2)+'Z" fill="'+p.color+'"/>';
+    });
+    s += '<text x="'+cx+'" y="'+(cy-2)+'" text-anchor="middle" font-size="20" font-weight="900" fill="#3D3A4E">'+total+'</text>';
+    s += '<text x="'+cx+'" y="'+(cy+16)+'" text-anchor="middle" font-size="11" font-weight="700" fill="#8B8397">接触过的词</text>';
+  }
+  var ly = 30;
+  parts.forEach(function(p, i){
+    s += '<rect x="150" y="'+(ly + i*26 - 8)+'" width="12" height="12" rx="3" fill="'+p.color+'"/>';
+    s += '<text x="168" y="'+(ly + i*26 + 2)+'" font-size="12" font-weight="700" fill="#8B8397">'+esc(p.label)+' '+p.value+'</text>';
+  });
+  s += '</svg>';
+  return s;
+}
+function renderParent(){
+  renderTop();
+  if(!ui.parentUnlocked){
+    $('pinCard').style.display = 'block';
+    $('parentBody').style.display = 'none';
+    $('pinHint').textContent = ui.pinMode === 'set' ? '第一次使用，请设置 4 位密码' : (ui.pinMode === 'change' ? '请输入新的 4 位密码' : '请输入 4 位密码查看学习报告');
+    $('pinTitle').textContent = ui.pinMode === 'set' ? '设置家长密码' : '家长模式';
+    renderPinDots();
+    return;
+  }
+  $('pinCard').style.display = 'none';
+  $('parentBody').style.display = 'block';
+
+  // 近 7 天柱状图
+  var data = [], today = todayStr();
+  for(var i=6;i>=0;i--){
+    var ds = addDays(today, -i);
+    var dd = state.days[ds];
+    data.push({ label: ds.slice(5).replace('-','/'), value: dd ? dd.done.length : 0 });
+  }
+  $('weekChart').innerHTML = barChart(data);
+
+  var mastered=0, learning=0;
+  WORDS.forEach(function(w){
+    var st = state.words[w.id];
+    if(!st || st.s===0) return;
+    if(st.s>=4) mastered++; else learning++;
+  });
+  $('pieChart').innerHTML = donutChart([
+    { label:'已掌握', value:mastered, color:'#6BD36B' },
+    { label:'学习中', value:learning, color:'#FFC53D' }
+  ]);
+
+  var dtd = state.days[today];
+  $('rToday').textContent = dtd ? dtd.done.length : 0;
+  var weekSum = data.reduce(function(a,b){ return a+b.value; },0);
+  $('rWeek').textContent = weekSum;
+  var sum=0, cnt=0;
+  WORDS.forEach(function(w){
+    var st = state.words[w.id];
+    if(st && st.best!=null){ sum+=st.best; cnt++; }
+  });
+  $('rAvg').textContent = cnt ? Math.round(sum/cnt) : '-';
+
+  $('valNew').textContent = state.settings.dailyNew;
+  $('valRate').textContent = (state.settings.rate||0.85).toFixed(2);
+  var boostOn2 = boostOn();
+  $('btnToggleBoost').textContent = boostOn2 ? '已开启' : '已关闭';
+  $('boostMixRow').style.display = boostOn2 ? 'flex' : 'none';
+  $('valBoost').textContent = state.settings.boostMix || 2;
+  $('boostDesc').textContent = boostOn2
+    ? ('开启中：每天额外混入 ' + (state.settings.boostMix||2) + ' 个功能词，当前补充池共 ' + unitWords(0).length + ' 词')
+    : '开启后每天额外混入几个功能词（I / you / is / play 等），不占闯关地图';
+  var btn = $('btnToggleAsr');
+  btn.textContent = state.settings.asr==='off' ? '仅录音自评' : '自动';
+  $('asrModeDesc').textContent = state.settings.asr==='off'
+    ? '仅录音自评：录音后自己听、自己评，最稳定'
+    : (SR ? '自动：能用 AI 打分就用，失败会自动改成录音自评' : '当前浏览器不支持识别，会直接用录音自评');
+}
+
+/* ---------- 13. 听音选词小擂台 ---------- */
+var LISTEN_SVG = '<svg class="illus" viewBox="0 0 100 100" role="img" aria-label="listen">'+
+  '<circle cx="50" cy="50" r="46" fill="#E7F4FF"/>'+
+  '<path d="M32 40h10l16-12v44L42 60H32z" fill="#4FBEE8"/>'+
+  '<path d="M66 32a24 24 0 010 36" stroke="#8BD3F0" stroke-width="6" fill="none" stroke-linecap="round"/>'+
+  '<path d="M78 22a36 36 0 010 56" stroke="#C2E8F8" stroke-width="6" fill="none" stroke-linecap="round"/></svg>';
+function quizOptions(target){
+  var pool = WORDS.filter(function(w){ return getWord(target.id) && w.id!==target.id && usableUnit(w.u); });
+  var sameUnit = pool.filter(function(w){ return w.u===target.u; });
+  var others = shuffle(sameUnit.length>=3 ? sameUnit : pool).slice(0,3).map(function(w){ return w.id; });
+  return shuffle([target.id].concat(others));
+}
+function startQuiz(){
+  var pool = [];
+  WORDS.forEach(function(w){ var st=state.words[w.id]; if(st && st.s>0) pool.push(w.id); });
+  if(pool.length<4){
+    unitWords(1).forEach(function(w){ pool.push(w.id); });
+    pool = pool.filter(function(v,i,a){ return a.indexOf(v)===i; });
+  }
+  if(pool.length<4){ toast('先去今日学几个单词再来挑战吧'); return; }
+  ui.quiz = shuffle(pool).slice(0,5).map(function(id){ return { id:id, opts:quizOptions(getWord(id)) }; });
+  ui.quizIdx = 0; ui.quizRight = 0; ui.mode = 'quiz'; ui.queue = [];
+  showTab('learn');
+  refreshAll();
+  if(ui.quiz.length) setTimeout(function(){
+    if(ui.mode!=='quiz') return;
+    var w0 = getWord(ui.quiz[0].id);
+    if(w0) speak(w0.en);
+  }, 300);
+}
+function renderQuiz(){
+  renderTop();
+  $('learnEmpty').style.display = 'none';
+  $('learnBody').style.display = 'block';
+  $('tipDone').style.display = 'none';
+  $('wWord').style.display = 'none';
+  $('wPho').style.display = 'none';
+  $('wCn').style.display = 'none';
+  $('wEx').style.display = 'none';
+  $('wPills').style.display = 'none';
+  $('readCard').style.display = 'none';
+  $('btnExample').style.display = 'none';
+  $('btnReveal').style.display = 'none';
+  $('btnMaster').style.display = 'none';
+  $('btnAgain').style.display = 'none';
+  $('btnBackToday').textContent = '结束小擂台';
+  $('fbBox').classList.remove('show');
+  $('illusBox').innerHTML = LISTEN_SVG;
+  $('learnTags').innerHTML = '<span class="tag">听音选词小擂台</span><span class="tag">第 '+(ui.quizIdx+1)+' / '+ui.quiz.length+' 题</span><span class="tag">答对 '+ui.quizRight+'</span>';
+  $('learnBar').style.width = Math.round(ui.quizIdx/ui.quiz.length*100) + '%';
+  $('learnBarText').textContent = '听一听，选出正确的单词';
+  $('quizHint').style.display = 'block';
+  var opts = $('quizOpts'); opts.style.display = 'grid'; opts.innerHTML = '';
+  var q = ui.quiz[ui.quizIdx];
+  q.opts.forEach(function(id){
+    var w = getWord(id); if(!w) return;
+    var b = el('button','qopt', esc(w.en));
+    b.addEventListener('click', function(){
+      if(ui.quizAnswered) return;
+      ui.quizAnswered = true;
+      if(id===q.id){ b.classList.add('right'); ui.quizRight++; state.stars += 1; saveState(); renderTop(); }
+      else { b.classList.add('wrong'); }
+      opts.querySelectorAll('.qopt').forEach(function(x){
+        if(getWord(x.textContent) && getWord(x.textContent).id===q.id) x.classList.add('right');
+      });
+      speak(getWord(q.id).en);
+      setTimeout(function(){
+        ui.quizAnswered = false;
+        ui.quizIdx++;
+        if(ui.quizIdx>=ui.quiz.length){ finishQuiz(); return; }
+        var nid = ui.quiz[ui.quizIdx] ? ui.quiz[ui.quizIdx].id : null;
+        refreshAll();
+        setTimeout(function(){
+          if(ui.mode!=='quiz') return;
+          var w2 = getWord(nid);
+          if(w2) speak(w2.en);
+        }, 220);
+      }, 1400);
+    });
+    opts.appendChild(b);
+  });
+}
+function finishQuiz(){
+  var gain = ui.quizRight * 2;
+  state.stars += gain;
+  saveState();
+  ui.mode = 'normal'; ui.queue = [];
+  $('celTitle').textContent = '小擂台完成！';
+  $('celSub').textContent = '答对 ' + ui.quizRight + ' / ' + ui.quiz.length + ' 题，获得 ' + gain + ' 颗星星！';
+  $('celebrate').classList.add('show');
+  refreshAll();
+}
+
+/* ---------- 14. 统一刷新入口（铁律9：单向调用，渲染函数之间不互调） ---------- */
+function refreshAll(){
+  renderTop();
+  if(ui.mode === 'quiz' && ui.quiz && ui.quiz.length){ renderQuiz(); return; }
+  renderToday();
+  renderLearn();
+  renderGrow();
+  renderParent();
+}
+
+/* ---------- 15. 导航 / 备份 / 家长密码 ---------- */
+function showTab(name){
+  ui.tab = name;
+  ['today','learn','grow','parent'].forEach(function(t){
+    $('panel-'+t).classList.toggle('active', t===name);
+  });
+  var btns = document.querySelectorAll('#tabs .tab');
+  Array.prototype.forEach.call(btns, function(b){ b.classList.toggle('active', b.getAttribute('data-tab')===name); });
+  window.scrollTo({ top:0, behavior:'smooth' });
+}
+function doExport(){
+  var payload = { app:'star-english', version:1, exportedAt:new Date().toISOString(), data:state };
+  var blob = new Blob([JSON.stringify(payload, null, 2)], { type:'application/json' });
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'star-english-backup-' + todayStr() + '.json';
+  document.body.appendChild(a); a.click();
+  setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); }, 500);
+  toast('备份已导出，记得保存到安全的地方');
+}
+function doImport(file){
+  var fr = new FileReader();
+  fr.onload = function(){
+    try{
+      var obj = JSON.parse(fr.result);
+      var data = obj && obj.data ? obj.data : obj;
+      if(!data || typeof data!=='object' || !data.words) throw new Error('bad');
+      var base = defaultState();
+      state = Object.assign(base, data);
+      state.settings = Object.assign(base.settings, data.settings||{});
+      state.streak = Object.assign({n:0,last:null}, data.streak||{});
+      saveState(); ui.queue=[]; ui.idx=0; ui.mode='normal';
+      refreshAll();
+      toast('导入成功，进度已恢复');
+    }catch(e){ toast('这个文件读不出来，换一个备份试试'); }
+  };
+  fr.readAsText(file);
+}
+function renderPinDots(){
+  var dots = $('pinDots').children, i;
+  for(i=0;i<dots.length;i++) dots[i].classList.toggle('on', i < ui.pinBuffer.length);
+}
+function submitPin(){
+  var pin = ui.pinBuffer;
+  if(pin.length !== 4) return;
+  var saved = localStorage.getItem(KEY_PIN);
+  if(ui.pinMode === 'set' || ui.pinMode === 'change'){
+    var isNew = (ui.pinMode === 'set');
+    localStorage.setItem(KEY_PIN, pin);
+    ui.parentUnlocked = true; ui.pinMode = 'verify'; ui.pinBuffer = '';
+    toast(isNew ? '密码设置成功' : '密码已更新');
+    refreshAll();
+    return;
+  }
+  if(!saved){
+    ui.pinMode = 'set'; ui.pinBuffer = '';
+    refreshAll();
+    return;
+  }
+  if(pin === saved){
+    ui.parentUnlocked = true; ui.pinBuffer = '';
+    refreshAll();
+  }else{
+    toast('密码不对，再试一次');
+    ui.pinBuffer = '';
+    refreshAll();
+  }
+}
+
+/* ---------- 16. 事件绑定 ---------- */
+function bindEvents(){
+  document.querySelectorAll('#tabs .tab').forEach(function(b){
+    b.addEventListener('click', function(){ showTab(b.getAttribute('data-tab')); });
+  });
+
+  $('btnStartLearn').addEventListener('click', function(){ goLearn(); });
+  $('btnReviewAll').addEventListener('click', goReviewAll);
+  $('btnQuickListen').addEventListener('click', startQuiz);
+  $('btnBackToday').addEventListener('click', function(){
+    if(ui.mode==='quiz'){ ui.mode='normal'; }
+    ui.queue = []; ui.idx = 0;
+    showTab('today'); refreshAll();
+  });
+  $('btnToGrow').addEventListener('click', function(){ showTab('grow'); });
+
+  $('btnSpeak').addEventListener('click', function(){
+    var txt = currentSpeakText();
+    if(txt) speak(txt);
+  });
+  $('btnExample').addEventListener('click', function(){
+    var w = currentWord(); if(w && w.ex) speak(w.ex);
+  });
+  $('btnReveal').addEventListener('click', function(){
+    ui.revealed = !ui.revealed;
+    $('wCn').classList.toggle('hide', !ui.revealed);
+    $('btnReveal').textContent = ui.revealed ? '藏起中文' : '显示中文';
+  });
+
+  $('btnRecord').addEventListener('click', function(){
+    var w = currentWord(); if(!w) return;
+    if(runningAsr){ try{ rec.stop(); }catch(e){} return; }
+    $('recLabel').textContent = '听着呢…';
+    $('fbBox').classList.remove('show');
+    $('selfJudge').style.display = 'none';
+    listenOnce(function(res){
+      $('recLabel').textContent = asrEnabled() ? '点我说话' : '点我录音';
+      var sc;
+      if(res.ok){
+        sc = scorePronounce(w.en, res);
+        ui.lastScore = sc.score;
+        showFeedback(sc.score, '听到你读的是：' + (sc.heard||''));
+        if(sc.score>=65){ markCurrent(true, sc.score); }
+      }else{
+        // 降级：录音回听自评
+        fallbackRecord(w);
+      }
+    });
+  });
+  $('btnReplay').addEventListener('click', playRecording);
+  $('btnSelfOk').addEventListener('click', function(){
+    ui.lastScore = 85; markCurrent(true, 85);
+  });
+  $('btnSelfAgain').addEventListener('click', function(){
+    ui.lastScore = 60; markCurrent(false, 60);
+  });
+
+  $('btnMaster').addEventListener('click', function(){ markCurrent(true, ui.lastScore); });
+  $('btnAgain').addEventListener('click', function(){ markCurrent(false, ui.lastScore); });
+
+  // 备份
+  $('btnExport').addEventListener('click', doExport);
+  $('btnExport2').addEventListener('click', doExport);
+  $('btnImport').addEventListener('click', function(){ $('fileImport').click(); });
+  $('fileImport').addEventListener('change', function(e){
+    if(e.target.files && e.target.files[0]) doImport(e.target.files[0]);
+    e.target.value = '';
+  });
+  $('btnClearDemo').addEventListener('click', function(){
+    confirmBox('清空示例数据','会把预置的示例进度清掉，从 Unit 1 重新开始。孩子真正的进度不受影响。','清空示例').then(function(ok){
+      if(!ok) return;
+      state = defaultState();
+      state.demo = false;
+      ensureDay(todayStr());
+      saveState(); ui.queue=[]; ui.idx=0;
+      refreshAll(); toast('已经清空，可以正式开始啦');
+    });
+  });
+  $('btnResetDemo').addEventListener('click', function(){
+    confirmBox('重置为示例数据','当前进度会被示例数据覆盖，确定吗？','确定重置').then(function(ok){
+      if(!ok) return;
+      state = demoState(); saveState();
+      ui.queue=[]; ui.idx=0; refreshAll();
+      toast('已重置为示例数据');
+    });
+  });
+  $('btnWipe').addEventListener('click', function(){
+    confirmBox('清空全部数据','所有星星、学习进度都会被删除，且无法找回。建议先导出备份。','我确定要清空').then(function(ok){
+      if(!ok) return;
+      state = defaultState(); state.demo = false;
+      ensureDay(todayStr());
+      localStorage.removeItem(KEY_PIN);
+      ui.parentUnlocked = false; ui.pinMode='verify'; ui.pinBuffer='';
+      ui.queue=[]; ui.idx=0; saveState(); refreshAll();
+      toast('全部数据已清空');
+    });
+  });
+
+  // 小键盘
+  var kp = $('keypad'), keys = ['1','2','3','4','5','6','7','8','9','重填','0','删除'];
+  keys.forEach(function(k){
+    var b = el('button','key', k);
+    b.addEventListener('click', function(){
+      if(k==='重填'){ ui.pinBuffer=''; }
+      else if(k==='删除'){ ui.pinBuffer = ui.pinBuffer.slice(0,-1); }
+      else if(ui.pinBuffer.length<4){ ui.pinBuffer += k; }
+      renderPinDots();
+      if(ui.pinBuffer.length===4) setTimeout(submitPin, 160);
+    });
+    kp.appendChild(b);
+  });
+  $('btnChangePin').addEventListener('click', function(){
+    ui.pinMode = 'change'; ui.pinBuffer = ''; ui.parentUnlocked = false;
+    refreshAll(); toast('请输入新的 4 位密码');
+  });
+
+  // 设置
+  $('plusNew').addEventListener('click', function(){
+    state.settings.dailyNew = clamp(state.settings.dailyNew+1, 2, 15); saveState(); refreshAll();
+  });
+  $('minusNew').addEventListener('click', function(){
+    state.settings.dailyNew = clamp(state.settings.dailyNew-1, 2, 15); saveState(); refreshAll();
+  });
+  $('plusRate').addEventListener('click', function(){
+    state.settings.rate = clamp(+(state.settings.rate+0.05).toFixed(2), 0.6, 1.2); saveState(); refreshAll();
+  });
+  $('minusRate').addEventListener('click', function(){
+    state.settings.rate = clamp(+(state.settings.rate-0.05).toFixed(2), 0.6, 1.2); saveState(); refreshAll();
+  });
+  $('btnToggleAsr').addEventListener('click', function(){
+    state.settings.asr = state.settings.asr==='off' ? 'auto' : 'off';
+    saveState(); refreshAll();
+    toast(state.settings.asr==='off' ? '已切换为录音自评模式' : '已切换为自动打分模式');
+  });
+  $('btnToggleBoost').addEventListener('click', function(){
+    state.settings.boost = !boostOn();
+    if(!state.settings.boostMix) state.settings.boostMix = 2;
+    saveState();
+    // 重新排今天的计划，让开关立刻生效（不丢已完成的部分）
+    var t = todayStr(), d = state.days[t];
+    if(d){
+      var doneSet = d.done || [];
+      var rePlan = planDay(t).filter(function(id){ return doneSet.indexOf(id)<0; });
+      d.planned = doneSet.concat(rePlan);
+      d.target = d.planned.length;
+    }
+    refreshAll();
+    toast(state.settings.boost ? '已开启补充词库，明天起每天多练几个功能词' : '已关闭补充词库');
+  });
+  $('plusBoost').addEventListener('click', function(){
+    state.settings.boostMix = clamp((state.settings.boostMix||2)+1, 1, 5); saveState(); refreshAll();
+  });
+  $('minusBoost').addEventListener('click', function(){
+    state.settings.boostMix = clamp((state.settings.boostMix||2)-1, 1, 5); saveState(); refreshAll();
+  });
+
+  $('celClose').addEventListener('click', function(){ $('celebrate').classList.remove('show'); });
+  $('mCancel').addEventListener('click', function(){ $('modal').classList.remove('show'); });
+
+  if(window.speechSynthesis) { loadVoices(); window.speechSynthesis.onvoiceschanged = loadVoices; }
+}
+
+/* ---------- 17. 小工具 ---------- */
+function currentWord(){
+  if(ui.mode==='quiz'){ return ui.quiz && ui.quiz[ui.quizIdx] ? getWord(ui.quiz[ui.quizIdx].id) : null; }
+  if(!ui.queue.length) return null;
+  return getWord(ui.queue[ui.idx]);
+}
+function currentSpeakText(){
+  var w = currentWord();
+  return w ? w.en : null;
+}
+function showFeedback(score, extra){
+  var fb = feedbackOf(score);
+  $('fbBox').className = 'feedback show ' + fb.cls;
+  $('fbScore').textContent = score + '分';
+  $('fbText').textContent = pickOne(fb.msg);
+  $('fbHeard').textContent = extra || '';
+}
+function fallbackRecord(w){
+  $('recLabel').textContent = '录 4 秒…';
+  startRecording(function(res){
+    $('recLabel').textContent = asrEnabled() ? '点我说话' : '点我录音';
+    if(!res.ok){
+      $('fbBox').className = 'feedback show mid';
+      $('fbScore').textContent = '录音/';
+      $('fbText').textContent = '这里没法自动听你读，那就自己大声读一遍再继续吧！';
+      $('fbHeard').textContent = res.reason==='denied' ? '需要先允许使用麦克风哦' : '跟着老师的发音一起读';
+      setTimeout(function(){ speak(w.en); }, 400);
+      return;
+    }
+    $('btnReplay').style.display = 'inline-flex';
+    $('fbBox').className = 'feedback show good';
+    $('fbScore').textContent = '录好啦';
+    $('fbText').textContent = '听听自己读的，再听听老师的，自己评一评！';
+    $('fbHeard').textContent = '';
+    $('selfJudge').style.display = 'block';
+    setTimeout(function(){ playRecording(); }, 300);
+  });
+}
+
+/* ---------- 18. 启动 ---------- */
+function init(){
+  ui.pinBuffer = '';
+  ui.pinMode = localStorage.getItem(KEY_PIN) ? 'verify' : 'set';
+  ui.parentUnlocked = false;
+  ui.quiz = []; ui.quizIdx = 0; ui.quizRight = 0; ui.quizAnswered = false;
+  loadState();
+  ensureDay(todayStr());
+  bindEvents();
+  refreshAll();
+  saveState();
+}
+if(document.readyState === 'loading'){
+  document.addEventListener('DOMContentLoaded', init);
+}else{
+  init();
+}
+</script>
+</body>
+</html>
